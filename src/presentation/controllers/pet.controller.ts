@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
 import { PetService } from 'src/application/services/pet.service';
 import AddPetRequestDto from 'src/shared/dtos/pet/AddPetRequestDto';
 import PetDto from 'src/shared/dtos/pet/PetDto';
@@ -21,5 +29,10 @@ export class PetController {
     const pet = await this.petService.addPet(addPet);
 
     return PetDto.toDto(pet);
+  }
+
+  @Delete(':id')
+  public async deletePet(@Param('id', ParseUUIDPipe) id: string) {
+    await this.petService.deletePet(id);
   }
 }
