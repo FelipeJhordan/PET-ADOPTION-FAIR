@@ -6,10 +6,12 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Put,
 } from '@nestjs/common';
 import { PetService } from 'src/application/services/pet.service';
 import AddPetRequestDto from 'src/shared/dtos/pet/AddPetRequestDto';
 import PetDto from 'src/shared/dtos/pet/PetDto';
+import UpdatePetRequestDto from 'src/shared/dtos/pet/UpdatePetRequestDto';
 
 @Controller('/pets')
 export class PetController {
@@ -34,5 +36,13 @@ export class PetController {
   @Delete(':id')
   public async deletePet(@Param('id', ParseUUIDPipe) id: string) {
     await this.petService.deletePet(id);
+  }
+
+  @Put(':id')
+  public async updatePet(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updatePetRequestDto: UpdatePetRequestDto,
+  ) {
+    return await this.petService.updatePet(id, updatePetRequestDto);
   }
 }
