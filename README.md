@@ -7,4 +7,3 @@
 - Utilizar logs
 - Utilizar Guard
 - Utilizar swagger
-- Utilizar midlewares
