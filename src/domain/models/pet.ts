@@ -1,11 +1,27 @@
 import { SITUATION } from './enums/situation.enum';
 import { STATE } from './enums/state.enum';
 
-export default class Pet {
+export class Pet {
   id: string;
   name?: string;
   breed: string;
   state: STATE;
   observation?: string;
   situation: SITUATION;
+
+  constructor(
+    breed: string,
+    state: STATE,
+    situation: SITUATION,
+    name?: string,
+    observation?: string,
+    id?: string,
+  ) {
+    this.breed = breed;
+    this.state = state;
+    this.situation = situation;
+    this.name = name;
+    this.observation = observation;
+    this.id = id;
+  }
 }
