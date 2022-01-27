@@ -13,7 +13,7 @@ module.exports = {
   password: password,
   database: database,
 
-  entities: ['dist/modules/**/*.entity.js'],
+  entities: ['dist/infra/database/**/*.entity.js'],
 
   synchronize: false,
 
