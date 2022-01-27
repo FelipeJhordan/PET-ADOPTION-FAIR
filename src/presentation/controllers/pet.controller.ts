@@ -9,6 +9,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { PetService } from 'src/application/services/pet.service';
+import { Pet } from 'src/domain/models/pet';
 import AddPetRequestDto from 'src/shared/dtos/pet/AddPetRequestDto';
 import PetDto from 'src/shared/dtos/pet/PetDto';
 import UpdatePetRequestDto from 'src/shared/dtos/pet/UpdatePetRequestDto';
@@ -24,6 +25,14 @@ export class PetController {
     );
   }
 
+  @Get(':id')
+  public async showById(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<PetDto> {
+    const pet = await this.petService.showById(id);
+    return PetDto.toDto(pet);
+  }
+
   @Post()
   public async addPet(
     @Body() addPet: AddPetRequestDto,
@@ -34,7 +43,9 @@ export class PetController {
   }
 
   @Delete(':id')
-  public async deletePet(@Param('id', ParseUUIDPipe) id: string) {
+  public async deletePet(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<void> {
     await this.petService.deletePet(id);
   }
 
@@ -42,7 +53,11 @@ export class PetController {
   public async updatePet(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updatePetRequestDto: UpdatePetRequestDto,
-  ) {
-    return await this.petService.updatePet(id, updatePetRequestDto);
+  ): Promise<PetDto> {
+    const pet = await this.petService.updatePet(
+      id,
+      updatePetRequestDto,
+    );
+    return PetDto.toDto(pet);
   }
 }

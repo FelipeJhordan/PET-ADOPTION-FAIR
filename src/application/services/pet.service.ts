@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NotFoundError } from 'rxjs';
 import { Pet } from 'src/domain/models/pet';
 import { IPetUseCases } from 'src/domain/usecases/pets-usecases';
 import { PetRepository } from 'src/infra/database/pets/repositories/pet.repository';
@@ -24,7 +23,8 @@ export class PetService implements IPetUseCases {
   }
 
   async deletePet(id: string): Promise<void> {
-    const pet = this.petRepository.findOne(id);
+    const pet = await this.petRepository.findOne(id);
+    console.log(pet);
     if (!pet) throw new NotFoundException();
 
     this.petRepository.delete(id);
@@ -34,7 +34,7 @@ export class PetService implements IPetUseCases {
     id: string,
     pet: UpdatePetRequestDto,
   ): Promise<Pet> {
-    const petBeforeUpdate = this.petRepository.findOne(id);
+    const petBeforeUpdate = await this.petRepository.findOne(id);
 
     if (!petBeforeUpdate) throw new NotFoundException();
 
@@ -47,5 +47,12 @@ export class PetService implements IPetUseCases {
       .execute();
 
     return (await petAfterUpdate).raw[0];
+  }
+
+  async showById(id: string): Promise<Pet> {
+    const pet = await this.petRepository.findOne(id);
+    if (!pet) throw new NotFoundException();
+
+    return pet;
   }
 }
