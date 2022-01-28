@@ -19,7 +19,21 @@ export const petMock: Pet = {
   deletedAt: null,
 };
 
+export const petMock2: Pet = {
+  id: randomUUID(),
+  breed: 'yorkshire',
+  situation: SITUATION.IN_PROCESS,
+  state: STATE.ADULT,
+  name: 'lulu',
+  observation: 'Faz muita arte, porém é carinhosa',
+  createdAt: date,
+  updatedAt: date,
+  deletedAt: null,
+};
+
 export const petDtoMock: PetDto = PetDto.toDto(petMock);
 export const addPetRequestDTO: AddPetRequestDto = {
   ...petDtoMock,
 };
+
+export const petsMock: Pet[] = [petMock, petMock2];
