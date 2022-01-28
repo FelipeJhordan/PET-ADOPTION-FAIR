@@ -2,7 +2,6 @@ import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { PetService } from 'application/services/pet.service';
 import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
-import { NotFoundError } from 'rxjs';
 import {
   petMock,
   petsMock,
@@ -23,7 +22,7 @@ describe('Pet service', () => {
             findOne: jest.fn(() => true),
             find: jest.fn(() => true),
             update: jest.fn(() => true),
-            delete: jest.fn(() => true),
+            softDelete: jest.fn(() => true),
           }),
         },
       ],
@@ -58,8 +57,8 @@ describe('Pet service', () => {
       .spyOn(petRepository, 'findOne')
       .mockImplementation(async () => null);
 
-    const pet = petService.showById(petMock.id);
-    expect(pet).rejects.toThrow(NotFoundException);
+    const response = petService.showById(petMock.id);
+    expect(response).rejects.toThrow(NotFoundException);
   });
 
   it('should save a pet', async () => {
@@ -70,7 +69,12 @@ describe('Pet service', () => {
     expect(pet.name).toEqual(petMock.name);
   });
 
-  it('should update a pet', async () => {
-    jest.spyOn(petRepository, 'update');
+  it('should remove a pet', async () => {
+    jest
+      .spyOn(petRepository, 'softDelete')
+      .mockImplementation(async () => Promise.resolve(null));
+    const response = await petService.deletePet(petMock.id);
+
+    expect(response).toBeUndefined();
   });
 });
