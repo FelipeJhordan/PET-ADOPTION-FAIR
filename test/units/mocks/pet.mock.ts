@@ -32,7 +32,7 @@ export const petMock2: Pet = {
 };
 
 export const petDtoMock: PetDto = PetDto.toDto(petMock);
-export const addPetRequestDTO: AddPetRequestDto = {
+export const mockAddPetRequestDTO: AddPetRequestDto = {
   ...petDtoMock,
 };
 
