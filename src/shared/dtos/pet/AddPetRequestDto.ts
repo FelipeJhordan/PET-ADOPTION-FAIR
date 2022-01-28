@@ -7,8 +7,9 @@ import {
 import { SITUATION } from 'src/domain/models/enums/situation.enum';
 import { STATE } from 'src/domain/models/enums/state.enum';
 import { Pet } from 'src/domain/models/pet';
+import { IAddPetParams } from 'src/domain/protocols/pets/add-pet-params';
 
-export default class AddPetRequestDto {
+export default class AddPetRequestDto implements IAddPetParams {
   @IsString()
   @IsOptional()
   name: string;

@@ -1,6 +1,6 @@
-import AddPetRequestDto from 'src/shared/dtos/pet/AddPetRequestDto';
 import { Pet } from '../models/pet';
+import { IAddPetParams } from '../protocols/pets/add-pet-params';
 
 export interface IAddPetUseCase {
-  addPet(pet: AddPetRequestDto): Promise<Pet>;
+  addPet(pet: IAddPetParams): Promise<Pet>;
 }
