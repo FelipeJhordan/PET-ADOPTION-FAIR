@@ -1,0 +1,29 @@
+{
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "./",
+    "testRegex": "unit.spec.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+    "src/**/*.ts",
+      "!src/infra/rest/**",
+      "!src/infra/database/migrations/**",
+      "!domain/**"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node",
+    "moduleDirectories": ["node_modules", "src"],
+    "moduleNameMapper": {
+    "^@application(.*)$": "<rootDir>/application$1",
+    "^@presentation(.*)$": "<rootDir>/presentation$1",
+    "^@infra(.*)$": "<rootDir>/infra$1",
+    "^@domain(.*)$": "<rootDir>/domain$1",
+    "^@shared(.*)$": "<rootDir>/shared$1"
+  }
+  
+}
