@@ -1,0 +1,19 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": "../.",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+
+   "moduleNameMapper": {
+    "^@application(.*)$": "<rootDir>/application$1",
+    "^@presentation(.*)$": "<rootDir>/presentation$1",
+    "^@infra(.*)$": "<rootDir>/infra$1",
+    "^@domain(.*)$": "<rootDir>/domain$1",
+    "^@shared(.*)$": "<rootDir>/shared$1"
+},
+  "moduleDirectories": ["node_modules", "src"]
+
+}

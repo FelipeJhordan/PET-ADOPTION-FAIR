@@ -19,7 +19,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e": "jest --config ./test/e2e/jest-e2e.json",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -88,7 +88,15 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleDirectories": ["node_modules", "src"],
+    "moduleNameMapper": {
+    "^@application(.*)$": "<rootDir>/application$1",
+    "^@presentation(.*)$": "<rootDir>/presentation$1",
+    "^@infra(.*)$": "<rootDir>/infra$1",
+    "^@domain(.*)$": "<rootDir>/domain$1",
+    "^@shared(.*)$": "<rootDir>/shared$1"
+  }
   },
   "lint-staged": {
     "*.ts": [
