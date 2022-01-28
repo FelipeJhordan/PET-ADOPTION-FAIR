@@ -25,4 +25,5 @@ module.exports = {
   cli: {
     migrationsDir: 'src/infra/database/migrations',
   },
+  keepConnectionAlive: true,
 };
