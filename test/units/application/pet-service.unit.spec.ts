@@ -1,6 +1,8 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { PetService } from 'application/services/pet.service';
 import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
+import { NotFoundError } from 'rxjs';
 import {
   petMock,
   petsMock,
@@ -51,11 +53,24 @@ describe('Pet service', () => {
     expect(pet.name).toBe(petMock.name);
   });
 
-  it('shoult should save a pet', async () => {
+  it('should throw if pet not exists', async () => {
+    jest
+      .spyOn(petRepository, 'findOne')
+      .mockImplementation(async () => null);
+
+    const pet = petService.showById(petMock.id);
+    expect(pet).rejects.toThrow(NotFoundException);
+  });
+
+  it('should save a pet', async () => {
     jest
       .spyOn(petRepository, 'save')
       .mockReturnValueOnce(Promise.resolve(petMock));
     const pet = await petService.addPet(mockAddPetRequestDTO);
     expect(pet.name).toEqual(petMock.name);
+  });
+
+  it('should update a pet', async () => {
+    jest.spyOn(petRepository, 'update');
   });
 });
