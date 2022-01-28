@@ -33,7 +33,6 @@ export class PetService implements IPetUseCases {
   async deletePet(id: string): Promise<void> {
     this.logger.log('Delete pet with id:' + id);
     const pet = await this.petRepository.findOne(id);
-    console.log(pet);
     if (!pet) throw new NotFoundException();
 
     this.petRepository.delete(id);
