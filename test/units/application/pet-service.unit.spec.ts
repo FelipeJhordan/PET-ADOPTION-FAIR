@@ -77,4 +77,14 @@ describe('Pet service', () => {
 
     expect(response).toBeUndefined();
   });
+
+  it('should throw notFoundException if ip not exists', async () => {
+    jest
+      .spyOn(petRepository, 'findOne')
+      .mockImplementation(async () => null);
+
+    const response = petService.deletePet(petMock.id);
+
+    expect(response).rejects.toThrow(new NotFoundException());
+  });
 });
