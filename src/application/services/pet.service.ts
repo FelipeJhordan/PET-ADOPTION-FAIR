@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Pet } from 'src/domain/models/pet';
 import { IPetUseCases } from 'src/domain/usecases/pets-usecases';
@@ -8,21 +12,26 @@ import UpdatePetRequestDto from 'src/shared/dtos/pet/UpdatePetRequestDto';
 
 @Injectable()
 export class PetService implements IPetUseCases {
+  private readonly logger = new Logger(PetService.name);
+
   constructor(
     @InjectRepository(PetRepository)
     private petRepository: PetRepository,
   ) {}
 
   async listPets(): Promise<Pet[]> {
+    this.logger.log('Find all pets');
     return this.petRepository.find();
   }
   async addPet(pet: AddPetRequestDto): Promise<Pet> {
+    this.logger.log(`Add pet ${JSON.stringify(pet)}`);
     const petFromDto: Pet = AddPetRequestDto.fromDto(pet);
     this.petRepository.save(petFromDto);
     return petFromDto;
   }
 
   async deletePet(id: string): Promise<void> {
+    this.logger.log('Delete pet with id:' + id);
     const pet = await this.petRepository.findOne(id);
     console.log(pet);
     if (!pet) throw new NotFoundException();
@@ -34,6 +43,10 @@ export class PetService implements IPetUseCases {
     id: string,
     pet: UpdatePetRequestDto,
   ): Promise<Pet> {
+    this.logger.log(
+      `Update pet by id:${id} with ${JSON.stringify(pet)}`,
+    );
+
     const petBeforeUpdate = await this.petRepository.findOne(id);
 
     if (!petBeforeUpdate) throw new NotFoundException();
@@ -50,6 +63,8 @@ export class PetService implements IPetUseCases {
   }
 
   async showById(id: string): Promise<Pet> {
+    this.logger.log('Show pet with id:' + id);
+
     const pet = await this.petRepository.findOne(id);
     if (!pet) throw new NotFoundException();
 
