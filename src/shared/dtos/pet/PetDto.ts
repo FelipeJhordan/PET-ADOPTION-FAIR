@@ -18,9 +18,11 @@ export default class PetDto {
   @Expose()
   situation: SITUATION;
   @Expose()
-  created_at: Date;
+  createdAt: Date;
   @Expose()
-  updated_at: Date;
+  updatedAt: Date;
+  @Expose()
+  deletedAt: Date;
 
   static toDto(pet: Pet): PetDto {
     return plainToClass(PetDto, pet, {

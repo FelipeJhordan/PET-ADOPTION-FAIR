@@ -8,7 +8,9 @@ export class Pet {
   state: STATE;
   observation?: string;
   situation: SITUATION;
-
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt?: Date;
   constructor(
     breed: string,
     state: STATE,
@@ -16,6 +18,9 @@ export class Pet {
     name?: string,
     observation?: string,
     id?: string,
+    deletedAt?: Date,
+    createdAt?: Date,
+    updatedAt?: Date,
   ) {
     this.breed = breed;
     this.state = state;
@@ -23,5 +28,8 @@ export class Pet {
     this.name = name;
     this.observation = observation;
     this.id = id;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.deletedAt = deletedAt;
   }
 }

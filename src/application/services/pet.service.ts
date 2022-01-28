@@ -21,7 +21,11 @@ export class PetService implements IPetUseCases {
 
   async listPets(): Promise<Pet[]> {
     this.logger.log('Find all pets');
-    return this.petRepository.find();
+    return this.petRepository.find({
+      where: {
+        deletedAt: null,
+      },
+    });
   }
   async addPet(pet: AddPetRequestDto): Promise<Pet> {
     this.logger.log(`Add pet ${JSON.stringify(pet)}`);
@@ -35,7 +39,7 @@ export class PetService implements IPetUseCases {
     const pet = await this.petRepository.findOne(id);
     if (!pet) throw new NotFoundException();
 
-    this.petRepository.delete(id);
+    this.petRepository.softDelete(id);
   }
 
   async updatePet(

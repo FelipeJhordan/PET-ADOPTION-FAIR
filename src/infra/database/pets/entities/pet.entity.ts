@@ -32,5 +32,21 @@ export const PetEntity = new EntitySchema<Pet>({
       type: String,
       nullable: true,
     },
+    createdAt: {
+      name: 'createdAt',
+      type: Date,
+      createDate: true,
+    },
+    updatedAt: {
+      name: 'updatedAt',
+      type: Date,
+      updateDate: true,
+    },
+    deletedAt: {
+      name: 'deletedAt',
+      type: Date,
+      nullable: true,
+      deleteDate: true,
+    },
   },
 });
