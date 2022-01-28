@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from 'src/infra/rest/validation/validation.pipe';
+import { ValidationPipe } from 'infra/rest/validation/validation.pipe';
 import { AppModule } from './ioc/app.module';
 import { applyMiddlewares } from '../infra/rest/middlewares';
-import { LoggingInterceptor } from 'src/infra/rest/intercerptors/logging.interceptor';
-import { HttpExceptionFilter } from 'src/infra/rest/intercerptors/http-exception.filter';
+import { LoggingInterceptor } from 'infra/rest/intercerptors/logging.interceptor';
+import { HttpExceptionFilter } from 'infra/rest/intercerptors/http-exception.filter';
 
 declare const module: any;
 

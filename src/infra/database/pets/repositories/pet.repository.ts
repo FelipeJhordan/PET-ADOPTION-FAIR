@@ -1,4 +1,4 @@
-import { Pet } from 'src/domain/models/pet';
+import { Pet } from 'domain/models/pet';
 import { EntityRepository, Repository } from 'typeorm';
 import { PetEntity } from '../entities/pet.entity';
 

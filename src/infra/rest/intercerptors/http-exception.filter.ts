@@ -6,7 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { getDate, getTime } from 'src/shared/utils/getDateAndTime';
+import { getDate, getTime } from 'shared/utils/getDateAndTime';
 
 @Catch(HttpException)
 export class HttpExceptionFilter

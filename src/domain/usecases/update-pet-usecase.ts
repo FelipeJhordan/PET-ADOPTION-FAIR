@@ -1,4 +1,3 @@
-import UpdatePetRequestDto from 'src/shared/dtos/pet/UpdatePetRequestDto';
 import { Pet } from '../models/pet';
 import { IUpdatePetParams } from '../protocols/pets/update-pet-params';
 

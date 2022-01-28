@@ -1,8 +1,8 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { SITUATION } from 'src/domain/models/enums/situation.enum';
-import { STATE } from 'src/domain/models/enums/state.enum';
-import { Pet } from 'src/domain/models/pet';
-import { IUpdatePetParams } from 'src/domain/protocols/pets/update-pet-params';
+import { SITUATION } from 'domain/models/enums/situation.enum';
+import { STATE } from 'domain/models/enums/state.enum';
+import { Pet } from 'domain/models/pet';
+import { IUpdatePetParams } from 'domain/protocols/pets/update-pet-params';
 
 export default class UpdatePetRequestDto implements IUpdatePetParams {
   @IsString()

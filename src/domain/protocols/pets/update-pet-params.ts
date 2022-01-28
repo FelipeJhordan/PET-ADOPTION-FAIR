@@ -1,5 +1,5 @@
-import { SITUATION } from 'src/domain/models/enums/situation.enum';
-import { STATE } from 'src/domain/models/enums/state.enum';
+import { SITUATION } from 'domain/models/enums/situation.enum';
+import { STATE } from 'domain/models/enums/state.enum';
 
 export interface IUpdatePetParams {
   name: string;

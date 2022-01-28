@@ -6,8 +6,8 @@ import {
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TerminusModule } from '@nestjs/terminus';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CacheService } from 'src/infra/cache/cache-service';
-import { HealthController } from 'src/presentation/controllers/health.controller';
+import { CacheService } from 'infra/cache/cache-service';
+import { HealthController } from 'presentation/controllers/health.controller';
 import { PetModule } from './pet.module';
 
 @Module({

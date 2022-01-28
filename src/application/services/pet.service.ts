@@ -4,11 +4,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Pet } from 'src/domain/models/pet';
-import { IPetUseCases } from 'src/domain/usecases/pets-usecases';
-import { PetRepository } from 'src/infra/database/pets/repositories/pet.repository';
-import AddPetRequestDto from 'src/shared/dtos/pet/AddPetRequestDto';
-import UpdatePetRequestDto from 'src/shared/dtos/pet/UpdatePetRequestDto';
+import { Pet } from 'domain/models/pet';
+import { IPetUseCases } from 'domain/usecases/pets-usecases';
+import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
+import AddPetRequestDto from 'shared/dtos/pet/AddPetRequestDto';
+import UpdatePetRequestDto from 'shared/dtos/pet/UpdatePetRequestDto';
 
 @Injectable()
 export class PetService implements IPetUseCases {

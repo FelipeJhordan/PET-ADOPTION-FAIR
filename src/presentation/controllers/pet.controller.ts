@@ -8,10 +8,10 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { PetService } from 'src/application/services/pet.service';
-import AddPetRequestDto from 'src/shared/dtos/pet/AddPetRequestDto';
-import PetDto from 'src/shared/dtos/pet/PetDto';
-import UpdatePetRequestDto from 'src/shared/dtos/pet/UpdatePetRequestDto';
+import { PetService } from 'application/services/pet.service';
+import AddPetRequestDto from 'shared/dtos/pet/AddPetRequestDto';
+import PetDto from 'shared/dtos/pet/PetDto';
+import UpdatePetRequestDto from 'shared/dtos/pet/UpdatePetRequestDto';
 
 @Controller('/pets')
 export class PetController {
