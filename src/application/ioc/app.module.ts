@@ -4,8 +4,10 @@ import {
   Module,
 } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { TerminusModule } from '@nestjs/terminus';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CacheService } from 'src/infra/cache/cache-service';
+import { HealthController } from 'src/presentation/controllers/health.controller';
 import { PetModule } from './pet.module';
 
 @Module({
@@ -15,8 +17,9 @@ import { PetModule } from './pet.module';
     CacheModule.registerAsync({
       useClass: CacheService,
     }),
+    TerminusModule,
   ],
-  controllers: [],
+  controllers: [HealthController],
   providers: [
     {
       provide: APP_INTERCEPTOR,

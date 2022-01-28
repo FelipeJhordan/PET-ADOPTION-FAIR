@@ -9,7 +9,6 @@ import {
   Put,
 } from '@nestjs/common';
 import { PetService } from 'src/application/services/pet.service';
-import { Pet } from 'src/domain/models/pet';
 import AddPetRequestDto from 'src/shared/dtos/pet/AddPetRequestDto';
 import PetDto from 'src/shared/dtos/pet/PetDto';
 import UpdatePetRequestDto from 'src/shared/dtos/pet/UpdatePetRequestDto';
