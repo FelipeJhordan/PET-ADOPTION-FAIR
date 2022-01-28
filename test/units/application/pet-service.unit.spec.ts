@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { PetService } from 'application/services/pet.service';
 import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
-import { petsMock } from '../mocks/pet.mock';
+import { petMock, petsMock } from '../mocks/pet.mock';
 
 describe('Pet service', () => {
   let petRepository: PetRepository;
@@ -35,5 +35,15 @@ describe('Pet service', () => {
     const pets = await petService.listPets();
     expect(pets).toHaveLength(2);
     expect(pets[1].name).toBe(petsMock[1].name);
+  });
+
+  it('should return a pet by id', async () => {
+    jest
+      .spyOn(petRepository, 'findOne')
+      .mockImplementation(async () => petMock);
+
+    const pet = await petService.showById(petMock.id);
+    expect(pet).toBeTruthy();
+    expect(pet.name).toBe(petMock.name);
   });
 });
