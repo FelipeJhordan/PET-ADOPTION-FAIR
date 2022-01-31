@@ -6,6 +6,7 @@ import {
   petMock,
   petsMock,
   mockAddPetRequestDTO,
+  mockUpdatePetRequestDto,
 } from '../mocks/pet.mock';
 
 describe('Pet service', () => {
@@ -23,6 +24,7 @@ describe('Pet service', () => {
             find: jest.fn(() => true),
             update: jest.fn(() => true),
             softDelete: jest.fn(() => true),
+            updateAndGetPetById: jest.fn(() => true),
           }),
         },
       ],
@@ -52,7 +54,7 @@ describe('Pet service', () => {
     expect(pet.name).toBe(petMock.name);
   });
 
-  it('should throw if pet not exists', async () => {
+  it('should show throw if pet not exists', async () => {
     jest
       .spyOn(petRepository, 'findOne')
       .mockImplementation(async () => null);
@@ -78,12 +80,41 @@ describe('Pet service', () => {
     expect(response).toBeUndefined();
   });
 
-  it('should throw notFoundException if ip not exists', async () => {
+  it('should remove throw notFoundException if ID not exists', async () => {
     jest
       .spyOn(petRepository, 'findOne')
       .mockImplementation(async () => null);
 
     const response = petService.deletePet(petMock.id);
+
+    expect(response).rejects.toThrow(new NotFoundException());
+  });
+
+  it('should update a pet', async () => {
+    jest
+      .spyOn(petRepository, 'updateAndGetPetById')
+      .mockReturnValueOnce(
+        Promise.resolve({ ...petMock, name: 'Tobias' }),
+      );
+    const petUpdated = await petService.updatePet(
+      petMock.id,
+      mockUpdatePetRequestDto,
+    );
+
+    expect(petUpdated).toBeTruthy();
+    expect(petUpdated.id).toBe(petMock.id);
+    expect(petUpdated.name).toMatch(/Tobias/gi);
+  });
+
+  it('should updatePet throw notFoundException if ID not exists', async () => {
+    jest
+      .spyOn(petRepository, 'findOne')
+      .mockImplementation(async () => null);
+
+    const response = petService.updatePet(petMock.id, {
+      ...petMock,
+      name: 'Tobias',
+    });
 
     expect(response).rejects.toThrow(new NotFoundException());
   });
