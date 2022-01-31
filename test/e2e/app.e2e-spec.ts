@@ -6,7 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { setEnvironment } from 'infra/environments';
 import { ConfigModule } from '@nestjs/config';
 import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
-import { mockAddPetRequestDTO } from '../units/mocks/pet.mock';
+import {
+  mockAddPetRequestDTO,
+  mockUpdatePetRequestDto,
+} from '../units/mocks/pet.mock';
 import { Repository } from 'typeorm';
 import { Pet } from 'domain/models/pet';
 
@@ -14,7 +17,7 @@ const findFirstPetAndReturnId = async (
   repository: Repository<Pet>,
 ): Promise<string> => {
   const pet = await repository.find();
-  return pet[0].id;
+  return pet[0]?.id;
 };
 
 describe(' (e2e)', () => {
@@ -87,6 +90,17 @@ describe(' (e2e)', () => {
       updatedAt: body.updatedAt,
       deletedAt: body.deletedAt,
     });
+  });
+
+  it('/pets/:id (DELETE)', async () => {
+    const uuidPet = await findFirstPetAndReturnId(petRepository);
+    const { body } = await request(app.getHttpServer())
+      .delete('/pets/' + uuidPet)
+      .expect(HttpStatus.OK);
+
+    const newIdSearch = await findFirstPetAndReturnId(petRepository);
+
+    expect(newIdSearch).toBeUndefined();
   });
 
   afterAll(async () => {
