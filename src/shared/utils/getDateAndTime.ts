@@ -12,6 +12,6 @@ export const getTime = (date: Date) =>
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getDateAndTime = (date: Date) => ({
-  date: `${getDate} `,
-  time: `${getTime}`,
+  date: `${getDate(date)}`,
+  time: `${getTime(date)}`,
 });
