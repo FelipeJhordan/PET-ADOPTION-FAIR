@@ -5,16 +5,16 @@ export class User {
   id: string;
   username?: string;
   password: string;
-  role: Role;
   person: Person;
+  role?: Role;
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
   constructor(
     username: string,
     password: string,
-    role: Role,
     person: Person,
+    role?: Role,
     id?: string,
     deletedAt?: Date,
     createdAt?: Date,
