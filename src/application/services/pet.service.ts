@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Pet } from 'domain/models/pet';
-import { IPetUseCases } from 'domain/usecases/pets-usecases';
+import { IPetUseCases } from 'domain/usecases/pets/pets-usecases';
 import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
 import AddPetRequestDto from 'shared/dtos/pet/AddPetRequestDto';
 import UpdatePetRequestDto from 'shared/dtos/pet/UpdatePetRequestDto';
