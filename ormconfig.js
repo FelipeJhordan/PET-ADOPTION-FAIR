@@ -4,6 +4,7 @@ const port = process.env.DB_PORT;
 const username = process.env.DB_USERNAME;
 const password = process.env.DB_PASSWORD;
 const database = process.env.DB_DATABASE;
+const environment = process.env.NODE_ENV;
 
 module.exports = {
   type: connection,
@@ -20,6 +21,7 @@ module.exports = {
   logging: true,
   logger: 'file',
 
+  migrationsRun: environment === 'test',
   migrationsTableName: 'migrations',
   migrations: ['dist/infra/database/migrations/*.js'],
   cli: {
