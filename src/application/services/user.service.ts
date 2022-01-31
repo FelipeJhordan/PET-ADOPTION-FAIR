@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Person } from 'domain/models/person';
 import { User } from 'domain/models/user';
@@ -14,8 +14,13 @@ export class UserService implements IUserUseCases {
   ) {}
 
   async register(user: IRegisterParams): Promise<User> {
-    await this.userRepository.findByEmail(user.email);
-
+    const emailExists = await this.userRepository.findByEmail(
+      user.email,
+    );
+    if (emailExists)
+      throw new BadRequestException(
+        'Email já registrado no sistema.',
+      );
     return new User(
       user.name,
       user.password,
