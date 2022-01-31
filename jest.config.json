@@ -15,7 +15,7 @@
       "!src/infra/database/migrations/**",
       "!domain/**"
     ],
-    "coverageDirectory": "../coverage",
+    "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "moduleDirectories": ["node_modules", "src"],
     "moduleNameMapper": {
