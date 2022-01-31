@@ -18,7 +18,7 @@ describe('<User service>', () => {
             find: jest.fn(() => true),
             update: jest.fn(() => true),
             softDelete: jest.fn(() => true),
-            updateAndGetPetById: jest.fn(() => true),
+            findByEmail: jest.fn(() => false),
           }),
         },
       ],
@@ -47,5 +47,23 @@ describe('<User service>', () => {
         mockUserRegisterRequestDto,
       );
     });
+
+    it('Should be call userRepository.findById with email and return false if email not is duplicate', async () => {
+      const findByIdSpy = jest.spyOn(userRepository, 'findByEmail');
+
+      await userService.register(mockUserRegisterRequestDto);
+
+      expect(findByIdSpy).toBeCalledTimes(1);
+      expect(findByIdSpy).toBeCalledWith(
+        mockUserRegisterRequestDto.email,
+      );
+      expect(findByIdSpy).toReturnWith(false);
+    }); // Ficou grande em
+
+    // it('Should throw BadRequestException if exist a user with same email', async () => {
+    //   jest
+    //     .spyOn(userRepository, 'findByEmail')
+    //     .mockReturnValueOnce(true);
+    // });
   });
 });
