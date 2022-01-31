@@ -3,10 +3,12 @@ import {
   CacheModule,
   Module,
 } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TerminusModule } from '@nestjs/terminus';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CacheService } from 'infra/cache/cache-service';
+import { setEnvironment } from 'infra/environments';
 import { HealthController } from 'presentation/controllers/health.controller';
 import { PetModule } from './pet.module';
 
@@ -16,6 +18,11 @@ import { PetModule } from './pet.module';
     TypeOrmModule.forRoot({}),
     CacheModule.registerAsync({
       useClass: CacheService,
+    }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      expandVariables: true,
+      envFilePath: setEnvironment(),
     }),
     TerminusModule,
   ],
