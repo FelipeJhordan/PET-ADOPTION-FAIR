@@ -9,6 +9,8 @@
 - Utilizar swagger
 - Utilizar middleware ✔
 - Utilizar Health checks ✔
-- Aplicar testes unitários
+- Aplicar testes unitários ✔
+- Aplicar testes de integração ✔
+- Aplicar TDD
 
 - Melhorar Arquitetura?
