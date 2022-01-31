@@ -54,15 +54,10 @@ export class PetService implements IPetUseCases {
 
     if (!petBeforeUpdate) throw new NotFoundException();
 
-    const petAfterUpdate = await this.petRepository
-      .createQueryBuilder('pets')
-      .update<Pet>(Pet, { ...pet })
-      .where('pets.id = :id', { id: id })
-      .returning('*')
-      .updateEntity(true)
-      .execute();
+    const petAfterUpdate =
+      await this.petRepository.updateAndGetPetById(id, pet);
 
-    return (await petAfterUpdate).raw[0];
+    return petAfterUpdate;
   }
 
   async showById(id: string): Promise<Pet> {
