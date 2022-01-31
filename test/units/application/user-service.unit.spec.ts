@@ -1,8 +1,9 @@
 import { Test } from '@nestjs/testing';
 import { UserService } from 'application/services/user.service';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
+import { mockUserRegisterRequestDto } from '../mocks/user.mock';
 
-describe('User service', () => {
+describe('<User service>', () => {
   let userRepository: UserRepository;
   let userService: UserService;
   beforeEach(async () => {
@@ -27,17 +28,24 @@ describe('User service', () => {
     userService = module.get<UserService>(UserService);
   });
 
-  it('Should be return a valid user ', async () => {
-    const user = await userService.register({
-      email: 'felipejordan.alves@gmail.com',
-      name: 'felipe jhordan',
-      address: 'Rua Mônica Machiyama',
-      username: 'felipejhordan',
-      password: '123',
-      phone: '3499757878',
+  describe('<<User Register>> ', () => {
+    it('Should be return a valid user ', async () => {
+      const user = await userService.register(
+        mockUserRegisterRequestDto,
+      );
+
+      expect(user).toBeTruthy();
+      expect(user.username).toBe('felipe jhordan');
     });
 
-    expect(user).toBeTruthy();
-    expect(user.username).toBe('felipe jhordan');
+    it('Should be called with valid params', async () => {
+      const registerSpy = jest.spyOn(userService, 'register');
+
+      userService.register(mockUserRegisterRequestDto);
+
+      expect(registerSpy).toHaveBeenCalledWith(
+        mockUserRegisterRequestDto,
+      );
+    });
   });
 });
