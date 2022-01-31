@@ -1,13 +1,21 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { AppModule } from '../../src/application/ioc/app.module';
 import { PetModule } from 'application/ioc/pet.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { setEnvironment } from 'infra/environments';
 import { ConfigModule } from '@nestjs/config';
 import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
 import { mockAddPetRequestDTO } from '../units/mocks/pet.mock';
+import { Repository } from 'typeorm';
+import { Pet } from 'domain/models/pet';
+
+const findFirstPetAndReturnId = async (
+  repository: Repository<Pet>,
+): Promise<string> => {
+  const pet = await repository.find();
+  return pet[0].id;
+};
 
 describe(' (e2e)', () => {
   let app: INestApplication;
@@ -62,6 +70,23 @@ describe(' (e2e)', () => {
         deletedAt: body[0].deletedAt,
       },
     ]);
+  });
+  it('/pets/:id (GET)', async () => {
+    const uuidPet = await findFirstPetAndReturnId(petRepository);
+    const { body } = await request(app.getHttpServer())
+      .get('/pets/' + uuidPet)
+      .expect(HttpStatus.OK);
+
+    expect(body).toBeTruthy();
+    expect(body.createdAt).toBeTruthy();
+    expect(body.updatedAt).toBeTruthy();
+
+    expect(body).toEqual({
+      ...mockAddPetRequestDTO,
+      createdAt: body.createdAt,
+      updatedAt: body.updatedAt,
+      deletedAt: body.deletedAt,
+    });
   });
 
   afterAll(async () => {
