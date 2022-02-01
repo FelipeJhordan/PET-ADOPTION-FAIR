@@ -30,3 +30,14 @@ export const mockUser: User = {
   updatedAt: date,
   deletedAt: null,
 };
+
+export const mockSaveParam = () => {
+  const { username, password, email, address, name, phone } =
+    mockUserRegisterRequestDto;
+  return {
+    username,
+    password,
+    role: new Role(ROLE[ROLE.COMMON]),
+    person: new Person(address, name, email, phone),
+  };
+};

@@ -1,12 +1,8 @@
-import {
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { UserService } from 'application/services/user.service';
 import { User } from 'domain/models/user';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
-import { NotFoundError } from 'rxjs';
 import {
   mockUser,
   mockUserRegisterRequestDto,
@@ -22,7 +18,7 @@ describe('<User service>', () => {
         {
           provide: UserRepository,
           useFactory: () => ({
-            save: jest.fn(() => true),
+            save: jest.fn((obj) => mockUser),
             create: jest.fn(() => true),
             findOne: jest.fn(() => true),
             find: jest.fn(() => true),
@@ -45,7 +41,7 @@ describe('<User service>', () => {
       );
 
       expect(user).toBeTruthy();
-      expect(user.username).toBe('felipe jhordan');
+      expect(user.username).toBe('felipejhordan');
     });
 
     it('Should be called with valid params', async () => {
@@ -95,6 +91,23 @@ describe('<User service>', () => {
       await userService.register(mockUserRegisterRequestDto);
 
       expect(saveSpy).toBeCalled();
+    });
+
+    it('Should return saved user', async () => {
+      jest
+        .spyOn(userRepository, 'save')
+        .mockImplementationOnce(async () =>
+          Promise.resolve(mockUser),
+        );
+      const user = await userService.register(
+        mockUserRegisterRequestDto,
+      );
+
+      expect(user).toBeTruthy();
+      expect(user.username).toEqual(mockUser.username);
+      expect(user.person).toBeTruthy();
+      expect(user.role).toBeTruthy();
+      expect(user.role.id).toBe(3);
     });
   });
 });
