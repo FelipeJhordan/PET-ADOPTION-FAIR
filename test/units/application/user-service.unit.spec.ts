@@ -1,10 +1,6 @@
-import {
-  BadRequestException,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { UserService } from 'application/services/user.service';
-import { User } from 'domain/models/user';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
 import {
   mockUser,
