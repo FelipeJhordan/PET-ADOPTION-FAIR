@@ -11,10 +11,12 @@ import { CacheService } from 'infra/cache/cache-service';
 import { setEnvironment } from 'infra/environments';
 import { HealthController } from 'presentation/controllers/health.controller';
 import { PetModule } from './pet.module';
+import { UserModule } from './user.module';
 
 @Module({
   imports: [
     PetModule,
+    UserModule,
     TypeOrmModule.forRoot({}),
     CacheModule.registerAsync({
       useClass: CacheService,
