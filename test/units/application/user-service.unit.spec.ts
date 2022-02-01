@@ -1,4 +1,7 @@
-import { BadRequestException } from '@nestjs/common';
+import {
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { UserService } from 'application/services/user.service';
 import { User } from 'domain/models/user';
@@ -108,6 +111,33 @@ describe('<User service>', () => {
       expect(user.person).toBeTruthy();
       expect(user.role).toBeTruthy();
       expect(user.role.id).toBe(3);
+    });
+    it('Should return saved user', async () => {
+      jest
+        .spyOn(userRepository, 'save')
+        .mockImplementationOnce(async () =>
+          Promise.resolve(mockUser),
+        );
+      const user = await userService.register(
+        mockUserRegisterRequestDto,
+      );
+
+      expect(user).toBeTruthy();
+      expect(user.username).toEqual(mockUser.username);
+      expect(user.person).toBeTruthy();
+      expect(user.role).toBeTruthy();
+      expect(user.role.id).toBe(3);
+    });
+    it('Should throw if throw', async () => {
+      jest
+        .spyOn(userRepository, 'save')
+        .mockImplementationOnce(async () =>
+          Promise.reject(new Error()),
+        );
+      const promise = userService.register(
+        mockUserRegisterRequestDto,
+      );
+      expect(promise).rejects.toThrow(Error);
     });
   });
 });
