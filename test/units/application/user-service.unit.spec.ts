@@ -1,7 +1,16 @@
+import {
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { UserService } from 'application/services/user.service';
+import { User } from 'domain/models/user';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
-import { mockUserRegisterRequestDto } from '../mocks/user.mock';
+import { NotFoundError } from 'rxjs';
+import {
+  mockUser,
+  mockUserRegisterRequestDto,
+} from '../mocks/user.mock';
 
 describe('<User service>', () => {
   let userRepository: UserRepository;
@@ -14,6 +23,7 @@ describe('<User service>', () => {
           provide: UserRepository,
           useFactory: () => ({
             save: jest.fn(() => true),
+            create: jest.fn(() => true),
             findOne: jest.fn(() => true),
             find: jest.fn(() => true),
             update: jest.fn(() => true),
@@ -60,10 +70,31 @@ describe('<User service>', () => {
       expect(findByIdSpy).toReturnWith(false);
     }); // Ficou grande em
 
-    // it('Should throw BadRequestException if exist a user with same email', async () => {
-    //   jest
-    //     .spyOn(userRepository, 'findByEmail')
-    //     .mockReturnValueOnce(true);
-    // });
+    it('Should throw BadRequestException if exist a user with same email', async () => {
+      jest
+        .spyOn(userRepository, 'findByEmail')
+        .mockReturnValueOnce(Promise.resolve(true));
+
+      const promise = userService.register(
+        mockUserRegisterRequestDto,
+      );
+
+      expect(promise).rejects.toThrow();
+      expect(promise).rejects.toBeInstanceOf(BadRequestException);
+      expect(promise).rejects.toEqual(
+        new BadRequestException('Email já registrado no sistema.'),
+      );
+    });
+    it('Should call save user ', async () => {
+      const saveSpy = jest
+        .spyOn(userRepository, 'save')
+        .mockImplementationOnce(async () =>
+          Promise.resolve(mockUser),
+        );
+
+      await userService.register(mockUserRegisterRequestDto);
+
+      expect(saveSpy).toBeCalled();
+    });
   });
 });
