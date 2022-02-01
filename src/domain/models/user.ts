@@ -5,15 +5,15 @@ export class User {
   id: string;
   username?: string;
   password: string;
-  person: Person;
   role?: Role;
+  person?: Person;
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
   constructor(
     username: string,
     password: string,
-    person: Person,
+    person?: Person,
     role?: Role,
     id?: string,
     deletedAt?: Date,

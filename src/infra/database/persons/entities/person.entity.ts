@@ -40,4 +40,12 @@ export const PersonEntity = new EntitySchema<Person>({
       deleteDate: true,
     },
   },
+  relations: {
+    user: {
+      type: 'one-to-one',
+      target: 'User',
+      inverseSide: 'user.id_person',
+      joinColumn: true,
+    },
+  },
 });

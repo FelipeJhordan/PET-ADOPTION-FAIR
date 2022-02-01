@@ -1,3 +1,5 @@
+import { User } from './user';
+
 export class Person {
   id: string;
   name?: string;
@@ -7,6 +9,7 @@ export class Person {
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
+  user?: User;
   constructor(
     address: string,
     name?: string,
@@ -16,6 +19,7 @@ export class Person {
     deletedAt?: Date,
     createdAt?: Date,
     updatedAt?: Date,
+    user?: User,
   ) {
     this.address = address;
     this.name = name;
@@ -26,5 +30,6 @@ export class Person {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.deletedAt = deletedAt;
+    this.user = user;
   }
 }
