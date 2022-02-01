@@ -34,10 +34,6 @@ export class UserService implements IUserUseCases {
       userBeforeSave,
     );
 
-    return new User(
-      user.name,
-      user.password,
-      new Person(user.address, user.name, user.email, user.phone),
-    );
+    return userAfterSave;
   }
 }
