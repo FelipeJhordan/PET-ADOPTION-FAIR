@@ -43,16 +43,23 @@ export const UserEntity = new EntitySchema<User>({
       type: 'one-to-one',
       target: 'Role',
       eager: true,
+      joinColumn: {
+        name: 'role',
+      },
       cascade: ['insert'],
-      inverseSide: 'role',
+      inverseSide: 'user',
     },
 
     person: {
       type: 'one-to-one',
       target: 'Person',
+      joinColumn: {
+        name: 'id_person',
+        referencedColumnName: 'id',
+      },
       eager: true,
-      cascade: ['insert'],
-      inverseSide: 'person',
+      cascade: ['insert', 'recover'],
+      inverseSide: 'user',
     },
   },
 });

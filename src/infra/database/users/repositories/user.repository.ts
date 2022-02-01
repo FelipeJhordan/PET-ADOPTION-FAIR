@@ -6,12 +6,14 @@ import { UserEntity } from '../entities/user.entity';
 export class UserRepository extends Repository<User> {
   async findByEmail(email: string): Promise<boolean> {
     const emailExists = await this.findOne({
+      relations: ['person'],
       where: {
         person: {
           email: email,
         },
       },
     });
+
     return !!emailExists;
   }
 }

@@ -19,7 +19,7 @@ export const RoleEntity = new EntitySchema<Role>({
   relations: {
     user: {
       type: 'one-to-one',
-      target: () => User,
+      target: 'User',
     },
   },
 });

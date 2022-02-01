@@ -44,8 +44,6 @@ export const PersonEntity = new EntitySchema<Person>({
     user: {
       type: 'one-to-one',
       target: 'User',
-      inverseSide: 'user.id_person',
-      joinColumn: true,
     },
   },
 });
