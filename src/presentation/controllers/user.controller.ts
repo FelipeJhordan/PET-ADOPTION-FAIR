@@ -7,7 +7,7 @@ import RegisterRequestDto from 'shared/dtos/user/RegisterRequestDto';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @Post()
+  @Post('/register')
   public async register(
     @Body() userData: RegisterRequestDto,
   ): Promise<User> {
