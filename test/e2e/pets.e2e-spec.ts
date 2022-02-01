@@ -17,7 +17,7 @@ const findFirstPetAndReturnId = async (
   return pet[0]?.id;
 };
 
-describe(' (e2e)', () => {
+describe('  (e2e)', () => {
   let app: INestApplication;
   let petRepository: PetRepository;
 
