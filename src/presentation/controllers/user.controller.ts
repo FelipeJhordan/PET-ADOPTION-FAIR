@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from 'application/services/user.service';
-import { User } from 'domain/models/user';
 import RegisterRequestDto from 'shared/dtos/user/RegisterRequestDto';
+import { UserDto } from 'shared/dtos/user/UserDto';
 
 @Controller('/users') // Deveria ter um controller só para funções de login /auth ou um /login -- mas deixa queto kk
 export class UserController {
@@ -10,7 +10,9 @@ export class UserController {
   @Post('/register')
   public async register(
     @Body() userData: RegisterRequestDto,
-  ): Promise<User> {
-    return this.userService.register(userData); // não precisa ter um await explicito aqui, o nestjs resolve pra gente (:
+  ): Promise<UserDto> {
+    const user = await this.userService.register(userData);
+
+    return UserDto.toDto(user);
   }
 }

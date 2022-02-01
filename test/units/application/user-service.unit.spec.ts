@@ -1,5 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import { Hash } from 'application/protocols/hash.protocol';
 import { UserService } from 'application/services/user.service';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
 import {
@@ -26,9 +27,15 @@ describe('<User service>', () => {
             findByEmail: jest.fn(() => false),
           }),
         },
+        {
+          provide: Hash,
+          useFactory: () => ({
+            hash: jest.fn(() => true),
+            compare: jest.fn(() => true),
+          }),
+        },
       ],
     }).compile();
-
     userRepository = module.get<UserRepository>(UserRepository);
     userService = module.get<UserService>(UserService);
   });
