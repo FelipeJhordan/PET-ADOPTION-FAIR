@@ -11,6 +11,6 @@ export class UserController {
   public async register(
     @Body() userData: RegisterRequestDto,
   ): Promise<User> {
-    return this.userService.register(userData);
+    return this.userService.register(userData); // não precisa ter um await explicito aqui, o nestjs resolve pra gente (:
   }
 }

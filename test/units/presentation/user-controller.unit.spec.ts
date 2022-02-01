@@ -57,5 +57,16 @@ describe('<User Controller>', () => {
       const errors = await validate(bodyRequest);
       expect(errors.length).toBe(1);
     });
+
+    it('Should return the user created', async () => {
+      const userPromise = userController.register(
+        mockUserRegisterRequestDto,
+      );
+      expect(userPromise).resolves.not.toThrowError();
+
+      const user = await userPromise;
+
+      expect(user.createdAt).toBeTruthy();
+    });
   });
 });
