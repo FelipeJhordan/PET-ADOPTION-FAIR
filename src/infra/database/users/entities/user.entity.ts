@@ -46,6 +46,7 @@ export const UserEntity = new EntitySchema<User>({
       target: () => Role,
       joinColumn: true,
       eager: true,
+      cascade: ['insert'],
     },
 
     person: {
@@ -53,6 +54,7 @@ export const UserEntity = new EntitySchema<User>({
       target: () => Person,
       joinColumn: true,
       eager: true,
+      cascade: ['insert'],
     },
   },
 });
