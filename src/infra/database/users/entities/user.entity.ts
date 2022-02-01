@@ -1,5 +1,3 @@
-import { Person } from 'domain/models/person';
-import { Role } from 'domain/models/role';
 import { User } from 'domain/models/user';
 import { EntitySchema } from 'typeorm';
 

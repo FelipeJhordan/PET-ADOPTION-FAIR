@@ -1,7 +1,6 @@
 import {
   MigrationInterface,
   QueryRunner,
-  QueryRunnerAlreadyReleasedError,
   TableColumn,
   TableForeignKey,
 } from 'typeorm';

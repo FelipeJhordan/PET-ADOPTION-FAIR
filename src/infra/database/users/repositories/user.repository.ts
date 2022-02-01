@@ -12,7 +12,6 @@ export class UserRepository extends Repository<User> {
         },
       },
     });
-    console.log(emailExists);
     return !!emailExists;
   }
 }

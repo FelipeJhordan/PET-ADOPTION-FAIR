@@ -6,10 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { setEnvironment } from 'infra/environments';
 import { ConfigModule } from '@nestjs/config';
 import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
-import {
-  mockAddPetRequestDTO,
-  mockUpdatePetRequestDto,
-} from '../units/mocks/pet.mock';
+import { mockAddPetRequestDTO } from '../units/mocks/pet.mock';
 import { Repository } from 'typeorm';
 import { Pet } from 'domain/models/pet';
 
@@ -52,7 +49,6 @@ describe(' (e2e)', () => {
       .expect('Content-Type', /json/)
       .expect(HttpStatus.CREATED);
 
-    console.log(body);
     expect(body.state).toBeTruthy();
     expect(body.breed).toBe(mockAddPetRequestDTO.breed);
   });
