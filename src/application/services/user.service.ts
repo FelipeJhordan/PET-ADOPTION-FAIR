@@ -1,5 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Hash } from 'application/protocols/hash.protocol';
+import { hash } from 'bcrypt';
 import { ROLE } from 'domain/models/enums/role.enum';
 import { Person } from 'domain/models/person';
 import { Role } from 'domain/models/role';
@@ -13,6 +15,7 @@ export class UserService implements IUserUseCases {
   constructor(
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
+    private Hashing: Hash,
   ) {}
 
   async register(user: IRegisterParams): Promise<User> {
@@ -23,9 +26,10 @@ export class UserService implements IUserUseCases {
         'Email já registrado no sistema.',
       );
 
+    const hashedPassword = await this.Hashing.hash(password); // ficou meio ruim o nome da classe kk
     const userBeforeSave = this.userRepository.create({
       username,
-      password,
+      password: hashedPassword,
       role: new Role(ROLE[ROLE.COMMON]),
       person: new Person(address, name, email, phone),
     });
