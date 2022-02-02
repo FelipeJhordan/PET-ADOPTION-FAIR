@@ -2,12 +2,15 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hash } from 'application/protocols/hash.protocol';
 import { hash } from 'bcrypt';
+import { randomUUID } from 'crypto';
 import { ROLE } from 'domain/models/enums/role.enum';
 import { Person } from 'domain/models/person';
 import { Role } from 'domain/models/role';
 import { User } from 'domain/models/user';
+import { ILoginParams } from 'domain/protocols/users/login-params';
+import { ILoginResponse } from 'domain/protocols/users/login-response';
 import { IRegisterParams } from 'domain/protocols/users/register-params';
-import { IUserUseCases } from 'domain/usecases/users/login-usecases';
+import { IUserUseCases } from 'domain/usecases/users/user-usecases';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
 
 @Injectable()
@@ -17,6 +20,13 @@ export class UserService implements IUserUseCases {
     private userRepository: UserRepository,
     private Hashing: Hash,
   ) {}
+
+  async login(login: ILoginParams): Promise<ILoginResponse> {
+    return {
+      dateLogin: new Date(),
+      token: randomUUID(),
+    };
+  }
 
   async register(user: IRegisterParams): Promise<User> {
     const { address, email, name, password, phone, username } = user;
