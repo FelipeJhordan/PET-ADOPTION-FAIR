@@ -4,6 +4,8 @@ import { UserController } from 'presentation/controllers/user.controller';
 import RegisterRequestDto from 'shared/dtos/user/RegisterRequestDto';
 import { validate } from 'class-validator';
 import {
+  mockLoginParam,
+  mockLoginResponse,
   mockUser,
   mockUserRegisterRequestDto,
 } from '../mocks/user.mock';
@@ -21,6 +23,7 @@ describe('<User Controller>', () => {
           provide: UserService,
           useFactory: () => ({
             register: jest.fn(() => mockUser),
+            login: jest.fn(() => mockLoginResponse),
           }),
         },
       ],
@@ -30,7 +33,7 @@ describe('<User Controller>', () => {
     userController = module.get<UserController>(UserController);
   });
 
-  describe('<User Register>', () => {
+  describe('<<User Register>>', () => {
     it('Should call userService.register', async () => {
       const registerSpy = jest.spyOn(userService, 'register');
       await userController.register(mockUserRegisterRequestDto);
@@ -67,6 +70,15 @@ describe('<User Controller>', () => {
       const user = await userPromise;
 
       expect(user.createdAt).toBeTruthy();
+    });
+  });
+  describe('<< User Login >>', () => {
+    it('Should call userService.login', async () => {
+      const loginSpy = jest.spyOn(userService, 'login');
+      userController.login(mockLoginParam);
+
+      expect(loginSpy).toBeCalled();
+      expect(loginSpy).toBeCalledWith(mockLoginParam);
     });
   });
 });

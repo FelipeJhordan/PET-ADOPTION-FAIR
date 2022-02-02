@@ -4,7 +4,7 @@ import { Person } from 'domain/models/person';
 import { Role } from 'domain/models/role';
 import { User } from 'domain/models/user';
 import { ILoginParams } from 'domain/protocols/users/login-params';
-import { ILoginUseCase } from 'domain/usecases/users';
+import { ILoginResponse } from 'domain/protocols/users/login-response';
 
 const date = new Date('2022-01-28T17:00:40.390Z');
 
@@ -48,4 +48,9 @@ export const mockLoginParam: ILoginParams = {
   username: 'felipejhordan',
   password: '12345',
   passwordConfirmation: '12345',
+};
+
+export const mockLoginResponse: ILoginResponse = {
+  token: 'valid_toten_response',
+  dateLogin: date,
 };
