@@ -29,14 +29,14 @@ export class UserService implements IUserUseCases {
     username,
     password,
   }: ILoginParams): Promise<ILoginResponse> {
+    const message = 'Credenciais inválidas';
     const user = await this.userRepository.findOne({
       where: {
         username,
       },
     });
 
-    if (!user)
-      throw new UnauthorizedException('Credenciais inválidas');
+    if (!user) throw new UnauthorizedException(message);
 
     return {
       dateLogin: new Date(),
