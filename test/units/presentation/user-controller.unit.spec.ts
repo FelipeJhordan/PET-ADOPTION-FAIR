@@ -80,5 +80,11 @@ describe('<User Controller>', () => {
       expect(loginSpy).toBeCalled();
       expect(loginSpy).toBeCalledWith(mockLoginParam);
     });
+
+    it('Should userController.login return the correct LoginRequestDto values', async () => {
+      const auth = await userController.login(mockLoginParam);
+
+      expect(auth).toBeTruthy();
+    });
   });
 });
