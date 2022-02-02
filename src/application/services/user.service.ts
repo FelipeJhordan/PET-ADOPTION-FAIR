@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hash } from 'application/protocols/hash.protocol';
 import { hash } from 'bcrypt';
@@ -21,7 +25,19 @@ export class UserService implements IUserUseCases {
     private Hashing: Hash,
   ) {}
 
-  async login(login: ILoginParams): Promise<ILoginResponse> {
+  async login({
+    username,
+    password,
+  }: ILoginParams): Promise<ILoginResponse> {
+    const user = await this.userRepository.findOne({
+      where: {
+        username,
+      },
+    });
+
+    if (!user)
+      throw new UnauthorizedException('Credenciais inválidas');
+
     return {
       dateLogin: new Date(),
       token: randomUUID(),
