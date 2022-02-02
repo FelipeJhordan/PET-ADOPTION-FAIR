@@ -12,8 +12,8 @@ import { UserController } from 'presentation/controllers/user.controller';
   providers: [
     UserService,
     {
-      provide: Hash,
-      useClass: BcryptAdapter,
+      provide: Hash, // Isso permite que qualquer um que extende Hash possa ser utilizado/injetado em algum lugar da aplicação
+      useClass: BcryptAdapter, // Poderia ser utilizado um factory function que retorna um objeto com que segue a interface do Hash
     },
   ],
 })
