@@ -86,5 +86,13 @@ describe('<User Controller>', () => {
 
       expect(auth).toBeTruthy();
     });
+
+    it('Should throw if userService throws', async () => {
+      jest
+        .spyOn(userService, 'login')
+        .mockReturnValueOnce(Promise.reject(new Error()));
+      const auth = userController.login(mockLoginParam);
+      expect(auth).rejects.toThrow();
+    });
   });
 });
