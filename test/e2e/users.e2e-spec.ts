@@ -3,12 +3,13 @@ import { ConfigModule } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from 'application/ioc/user.module';
-import { UserService } from 'application/services/user.service';
-import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
 import { setEnvironment } from 'infra/environments';
 import request from 'supertest';
-import { mockUserRegisterRequestDto } from '../units/mocks/user.mock';
+import {
+  mockLoginParamController,
+  mockUserRegisterRequestDto,
+} from '../units/mocks/user.mock';
 
 describe(' (e2e) ', () => {
   let app: INestApplication;
@@ -32,6 +33,10 @@ describe(' (e2e) ', () => {
     app = module.createNestApplication();
     await app.init();
     userRepository = module.get<UserRepository>(UserRepository);
+
+    await userRepository.query(
+      'DELETE FROM users;DELETE FROM persons;',
+    );
   });
 
   it('/users/register (POST)', async () => {
@@ -41,8 +46,18 @@ describe(' (e2e) ', () => {
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(HttpStatus.CREATED);
+    expect(body.createdAt).toBeTruthy();
+  });
 
-    expect(body.id).toBeTruthy();
+  it('/users/login (POST)', async () => {
+    const { body } = await request(app.getHttpServer())
+      .post('/users/login')
+      .send(mockLoginParamController)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(HttpStatus.OK);
+
+    expect(body.token).toBeTruthy();
   });
 
   afterAll(async () => {
