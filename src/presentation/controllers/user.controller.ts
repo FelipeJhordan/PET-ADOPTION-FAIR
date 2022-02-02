@@ -1,5 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from 'application/services/user.service';
+import { LoginRequestDto } from 'shared/dtos/user/LoginRequestDto';
+import { ILoginResponseDto } from 'shared/dtos/user/LoginResponseDto';
 import RegisterRequestDto from 'shared/dtos/user/RegisterRequestDto';
 import { UserDto } from 'shared/dtos/user/UserDto';
 
@@ -14,5 +16,13 @@ export class UserController {
     const user = await this.userService.register(userData);
 
     return UserDto.toDto(user);
+  }
+
+  @Post('/login')
+  public async login(
+    @Body() auth: LoginRequestDto,
+  ): Promise<ILoginResponseDto> {
+    const dataLogin = await this.userService.login(auth);
+    return null;
   }
 }
