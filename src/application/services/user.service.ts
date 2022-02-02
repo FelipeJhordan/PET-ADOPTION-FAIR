@@ -38,6 +38,11 @@ export class UserService implements IUserUseCases {
 
     if (!user) throw new UnauthorizedException(message);
 
+    const isCorrectPassword = this.Hashing.compare(
+      password,
+      user.password,
+    );
+
     return {
       dateLogin: new Date(),
       token: randomUUID(),
