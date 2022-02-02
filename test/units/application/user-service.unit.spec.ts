@@ -1,4 +1,7 @@
-import { BadRequestException } from '@nestjs/common';
+import {
+  BadRequestException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { Hash } from 'application/protocols/hash.protocol';
 import { UserService } from 'application/services/user.service';
@@ -171,6 +174,15 @@ describe('<User service>', () => {
 
       expect(findOneSpy).toBeCalled();
       expect(findOneSpy).toReturnWith(mockUser);
+    });
+
+    it('Should throw 403 if user not found', async () => {
+      jest
+        .spyOn(userRepository, 'findOne')
+        .mockReturnValueOnce(Promise.resolve(null));
+      const auth = userService.login(mockLoginParam);
+
+      expect(auth).rejects.toThrow(UnauthorizedException);
     });
   });
 });
