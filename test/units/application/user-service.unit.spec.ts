@@ -3,7 +3,9 @@ import { Test } from '@nestjs/testing';
 import { Hash } from 'application/protocols/hash.protocol';
 import { UserService } from 'application/services/user.service';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
+import { username } from '../../../ormconfig';
 import {
+  mockLoginParam,
   mockUser,
   mockUserRegisterRequestDto,
 } from '../mocks/user.mock';
@@ -152,6 +154,16 @@ describe('<User service>', () => {
       expect(hashingSpy).toBeCalledWith(
         mockUserRegisterRequestDto.password,
       );
+    });
+  });
+
+  describe('<<User Login>> ', () => {
+    it('Should return a correct ILoginResponse ', async () => {
+      const auth = await userService.login(mockLoginParam);
+      expect(auth).toBeTruthy();
+      expect(auth.dateLogin).toBeInstanceOf(Date);
+      expect(auth.token).toBeTruthy();
+      expect(auth.token.length).toBeGreaterThan(10);
     });
   });
 });

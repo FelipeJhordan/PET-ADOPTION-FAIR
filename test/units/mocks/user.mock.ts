@@ -3,6 +3,8 @@ import { ROLE } from 'domain/models/enums/role.enum';
 import { Person } from 'domain/models/person';
 import { Role } from 'domain/models/role';
 import { User } from 'domain/models/user';
+import { ILoginParams } from 'domain/protocols/users/login-params';
+import { ILoginUseCase } from 'domain/usecases/users';
 
 const date = new Date('2022-01-28T17:00:40.390Z');
 
@@ -40,4 +42,10 @@ export const mockSaveParam = () => {
     role: new Role(ROLE[ROLE.COMMON]),
     person: new Person(address, name, email, phone),
   };
+};
+
+export const mockLoginParam: ILoginParams = {
+  username: 'felipejhordan',
+  password: '12345',
+  passwordConfirmation: '12345',
 };
