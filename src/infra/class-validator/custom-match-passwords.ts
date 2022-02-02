@@ -14,7 +14,7 @@ export class CustomMatchPasswords
     return true;
   }
 
-  defaultMessage(validationArguments?: ValidationArguments): string {
+  defaultMessage(args: ValidationArguments) {
     return 'Passwords do not match!';
   }
 }

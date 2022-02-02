@@ -31,12 +31,14 @@ export class UserService implements IUserUseCases {
     password,
   }: ILoginParams): Promise<ILoginResponse> {
     const message = 'Credenciais inválidas';
+    console.log('tou aqui');
     const user = await this.userRepository.findOne({
       where: {
         username,
       },
     });
 
+    console.log(user);
     if (!user) throw new UnauthorizedException(message);
 
     const isCorrectPassword = this.Hashing.compare(
@@ -57,11 +59,12 @@ export class UserService implements IUserUseCases {
   async register(user: IRegisterParams): Promise<User> {
     const { address, email, name, password, phone, username } = user;
     const emailExists = await this.userRepository.findByEmail(email);
+    console.log('tou aqui pow');
     if (emailExists)
       throw new BadRequestException(
         'Email já registrado no sistema.',
       );
-
+    console.log(name);
     const hashedPassword = await this.Hashing.hash(password); // ficou meio ruim o nome da classe kk
     const userBeforeSave = this.userRepository.create({
       username,

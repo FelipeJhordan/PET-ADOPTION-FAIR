@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { UserService } from 'application/services/user.service';
 import { LoginRequestDto } from 'shared/dtos/user/LoginRequestDto';
 import { ILoginResponseDto } from 'shared/dtos/user/LoginResponseDto';
@@ -19,6 +19,7 @@ export class UserController {
   }
 
   @Post('/login')
+  @HttpCode(200)
   public async login(
     @Body() auth: LoginRequestDto,
   ): Promise<ILoginResponseDto> {

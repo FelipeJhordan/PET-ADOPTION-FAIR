@@ -46,7 +46,7 @@ export const UserEntity = new EntitySchema<User>({
       joinColumn: {
         name: 'role',
       },
-      cascade: ['insert'],
+      cascade: ['insert', 'recover'],
       inverseSide: 'user',
     },
 
