@@ -7,7 +7,7 @@ import { Person } from 'domain/models/person';
 import { Role } from 'domain/models/role';
 import { User } from 'domain/models/user';
 import { IRegisterParams } from 'domain/protocols/users/register-params';
-import { IUserUseCases } from 'domain/usecases/users/pets-usecases';
+import { IUserUseCases } from 'domain/usecases/users/login-usecases';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
 
 @Injectable()
