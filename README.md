@@ -18,3 +18,7 @@
 ## Motivação
 
 Aprender conceitos novos / me aprimorar antes de começar um novo projeto na empresa.
+
+## Aprendizado
+
+Eu utilizei o jsonwebtoken, porem o nestjs possui uma biblioteca que auxilia nisso o @nestjs/jwt
