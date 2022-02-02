@@ -11,6 +11,7 @@ import {
 describe('<User service>', () => {
   let userRepository: UserRepository;
   let userService: UserService;
+  let hashing: Hash;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
@@ -38,6 +39,7 @@ describe('<User service>', () => {
     }).compile();
     userRepository = module.get<UserRepository>(UserRepository);
     userService = module.get<UserService>(UserService);
+    hashing = module.get<Hash>(Hash);
   });
 
   describe('<<User Register>> ', () => {
@@ -141,6 +143,15 @@ describe('<User service>', () => {
         mockUserRegisterRequestDto,
       );
       expect(promise).rejects.toThrow(Error);
+    });
+
+    it('Should call Hashing.hash with correct value', async () => {
+      const hashingSpy = jest.spyOn(hashing, 'hash');
+      await userService.register(mockUserRegisterRequestDto);
+      expect(hashingSpy).toBeCalled();
+      expect(hashingSpy).toBeCalledWith(
+        mockUserRegisterRequestDto.password,
+      );
     });
   });
 });
