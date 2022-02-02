@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hash } from 'application/protocols/hash.protocol';
-import { hash } from 'bcrypt';
+import { Jwt } from 'application/protocols/jwt.protocol';
 import { randomUUID } from 'crypto';
 import { ROLE } from 'domain/models/enums/role.enum';
 import { Person } from 'domain/models/person';
@@ -23,6 +23,7 @@ export class UserService implements IUserUseCases {
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
     private Hashing: Hash,
+    private Jwt: Jwt,
   ) {}
 
   async login({
@@ -44,6 +45,8 @@ export class UserService implements IUserUseCases {
     );
 
     if (!isCorrectPassword) throw new UnauthorizedException(message);
+
+    const token = this.Jwt.sign({ id: user.id });
 
     return {
       dateLogin: new Date(),
