@@ -14,7 +14,7 @@ module.exports = {
   password: password,
   database: database,
 
-  entities: ['dist/infra/database/**/*.entity.{js,ts}'],
+  entities: ['dist/src/infra/database/**/*.entity.{js,ts}'],
 
   synchronize: false,
 
@@ -23,7 +23,7 @@ module.exports = {
 
   migrationsRun: environment === 'test',
   migrationsTableName: 'migrations',
-  migrations: ['dist/infra/database/migrations/*.{js,ts}'],
+  migrations: ['dist/src/infra/database/migrations/*.{js,ts}'],
   cli: {
     migrationsDir: 'src/infra/database/migrations',
   },
