@@ -23,6 +23,6 @@ export class UserController {
     @Body() auth: LoginRequestDto,
   ): Promise<ILoginResponseDto> {
     const dataLogin = await this.userService.login(auth);
-    return null;
+    return dataLogin;
   }
 }
