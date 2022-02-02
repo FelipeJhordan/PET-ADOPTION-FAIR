@@ -43,6 +43,8 @@ export class UserService implements IUserUseCases {
       user.password,
     );
 
+    if (!isCorrectPassword) throw new UnauthorizedException(message);
+
     return {
       dateLogin: new Date(),
       token: randomUUID(),
