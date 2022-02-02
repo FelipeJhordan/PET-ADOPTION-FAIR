@@ -3,7 +3,6 @@ import { Test } from '@nestjs/testing';
 import { Hash } from 'application/protocols/hash.protocol';
 import { UserService } from 'application/services/user.service';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
-import { username } from '../../../ormconfig';
 import {
   mockLoginParam,
   mockUser,
@@ -23,8 +22,8 @@ describe('<User service>', () => {
           useFactory: () => ({
             save: jest.fn((obj) => mockUser),
             create: jest.fn(() => true),
-            findOne: jest.fn(() => true),
-            find: jest.fn(() => true),
+            findOne: jest.fn(() => mockUser),
+            find: jest.fn(() => mockUser),
             update: jest.fn(() => true),
             softDelete: jest.fn(() => true),
             findByEmail: jest.fn(() => false),
@@ -164,6 +163,14 @@ describe('<User service>', () => {
       expect(auth.dateLogin).toBeInstanceOf(Date);
       expect(auth.token).toBeTruthy();
       expect(auth.token.length).toBeGreaterThan(10);
+    });
+
+    it('Should find user by username', async () => {
+      const findOneSpy = jest.spyOn(userRepository, 'findOne');
+      await userService.login(mockLoginParam);
+
+      expect(findOneSpy).toBeCalled();
+      expect(findOneSpy).toReturnWith(mockUser);
     });
   });
 });
