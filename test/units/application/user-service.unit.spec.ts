@@ -5,6 +5,8 @@ import {
 import { Test } from '@nestjs/testing';
 import { Hash } from 'application/protocols/hash.protocol';
 import { UserService } from 'application/services/user.service';
+import { compare } from 'bcrypt';
+import { randomUUID } from 'crypto';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
 import {
   mockLoginParam,
@@ -183,6 +185,17 @@ describe('<User service>', () => {
       const auth = userService.login(mockLoginParam);
 
       expect(auth).rejects.toThrow(UnauthorizedException);
+    });
+
+    it('Should call Hashing.compare with password and return if it`s result of match', async () => {
+      const compareSpy = jest.spyOn(hashing, 'compare');
+      await userService.login(mockLoginParam);
+
+      expect(compareSpy).toBeCalled();
+      expect(compareSpy).toBeCalledWith(
+        mockLoginParam.password,
+        mockUser.password,
+      );
     });
   });
 });
