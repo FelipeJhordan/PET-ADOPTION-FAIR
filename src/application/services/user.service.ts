@@ -46,11 +46,11 @@ export class UserService implements IUserUseCases {
 
     if (!isCorrectPassword) throw new UnauthorizedException(message);
 
-    const token = this.Jwt.sign({ id: user.id });
+    const token = await this.Jwt.sign({ id: user.id });
 
     return {
       dateLogin: new Date(),
-      token: randomUUID(),
+      token,
     };
   }
 
