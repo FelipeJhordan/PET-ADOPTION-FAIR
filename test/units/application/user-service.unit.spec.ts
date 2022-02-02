@@ -44,7 +44,7 @@ describe('<User service>', () => {
         {
           provide: Jwt,
           useFactory: () => ({
-            sign: jest.fn(() => 'jwt_value'),
+            sign: jest.fn(() => 'jwt_value_key'),
           }),
         },
       ],
@@ -219,7 +219,15 @@ describe('<User service>', () => {
       await userService.login(mockLoginParam);
 
       expect(signSpy).toBeCalled();
-      expect(signSpy).toReturnWith('jwt_value');
+      expect(signSpy).toReturnWith('jwt_value_key');
+    });
+
+    it('Should return a same token of returned in Jwt.sign', async () => {
+      const signSpy = jest.spyOn(encrypt, 'sign');
+
+      const auth = await userService.login(mockLoginParam);
+
+      expect(signSpy).toReturnWith(auth.token);
     });
   });
 });
