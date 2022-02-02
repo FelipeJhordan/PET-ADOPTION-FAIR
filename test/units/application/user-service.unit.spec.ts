@@ -197,5 +197,13 @@ describe('<User service>', () => {
         mockUser.password,
       );
     });
+
+    it('Should throw 403 if password not correct', async () => {
+      jest.spyOn(hashing, 'compare').mockReturnValueOnce(null);
+
+      const auth = userService.login(mockLoginParam);
+
+      expect(auth).rejects.toThrow(UnauthorizedException);
+    });
   });
 });
