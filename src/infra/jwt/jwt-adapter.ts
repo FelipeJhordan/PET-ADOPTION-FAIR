@@ -4,12 +4,14 @@ import jwt from 'jsonwebtoken';
 
 export class JwtAdapter extends Jwt {
   async sign(payload: IJwtPayload): Promise<string> {
-    return await jwt.sign(
+    const token = await jwt.sign(
       payload,
       process.env.JWT_SECRET_KEY || 'test_key',
       {
         expiresIn: process.env.JWT_EXP || 3600,
       },
     );
+
+    return token;
   }
 }
