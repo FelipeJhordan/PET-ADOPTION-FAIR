@@ -4,9 +4,8 @@ import {
 } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { Hash } from 'application/protocols/hash.protocol';
+import { Jwt } from 'application/protocols/jwt.protocol';
 import { UserService } from 'application/services/user.service';
-import { compare } from 'bcrypt';
-import { randomUUID } from 'crypto';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
 import {
   mockLoginParam,
@@ -18,6 +17,7 @@ describe('<User service>', () => {
   let userRepository: UserRepository;
   let userService: UserService;
   let hashing: Hash;
+  let encrypt: Jwt;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
@@ -41,11 +41,18 @@ describe('<User service>', () => {
             compare: jest.fn(() => true),
           }),
         },
+        {
+          provide: Jwt,
+          useFactory: () => ({
+            sign: jest.fn(() => 'jwt_value'),
+          }),
+        },
       ],
     }).compile();
     userRepository = module.get<UserRepository>(UserRepository);
     userService = module.get<UserService>(UserService);
     hashing = module.get<Hash>(Hash);
+    encrypt = module.get<Jwt>(Jwt);
   });
 
   describe('<<User Register>> ', () => {
@@ -204,6 +211,15 @@ describe('<User service>', () => {
       const auth = userService.login(mockLoginParam);
 
       expect(auth).rejects.toThrow(UnauthorizedException);
+    });
+
+    it('Should encrypt using JWT and return a token', async () => {
+      const signSpy = jest.spyOn(encrypt, 'sign');
+
+      await userService.login(mockLoginParam);
+
+      expect(signSpy).toBeCalled();
+      expect(signSpy).toReturnWith('jwt_value');
     });
   });
 });
