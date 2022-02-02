@@ -1,8 +1,6 @@
-import { Injectable } from '@nestjs/common';
 import { Hash } from 'application/protocols/hash.protocol';
 import { compare, hash } from 'bcrypt';
 
-@Injectable()
 export class BcryptAdapter implements Hash {
   async hash(value: string, salt?: number): Promise<string> {
     const SALT = salt || 12;
