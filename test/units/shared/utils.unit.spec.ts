@@ -3,6 +3,7 @@ import {
   getDate,
   getTime,
   getDateAndTime,
+  formatJwtString,
 } from 'shared/utils';
 
 describe('Test utils', () => {
@@ -39,5 +40,11 @@ describe('Test utils', () => {
     expect(time).toBe(dateAndTime.time);
     expect(date).toBe(dateAndTime.date);
     expect(fc.getDateAndTime(dateMock)).toEqual({ date, time });
+  });
+
+  it('Should test formatJwtString', () => {
+    const token = 'Bearer thebearertoken1670965234';
+    const formatedToken = formatJwtString(token);
+    expect(formatedToken).toBe('thebearertoken1670965234');
   });
 });

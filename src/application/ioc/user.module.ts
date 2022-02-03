@@ -6,6 +6,7 @@ import { UserService } from 'application/services/user.service';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
 import { BcryptAdapter } from 'infra/hash/bcrypt-adapter';
 import { JwtAdapter } from 'infra/jwt/jwt-adapter';
+import { AuthGuard } from 'infra/rest/guard/auth-guard';
 import { UserController } from 'presentation/controllers/user.controller';
 
 @Module({
@@ -13,6 +14,7 @@ import { UserController } from 'presentation/controllers/user.controller';
   controllers: [UserController],
   providers: [
     UserService,
+    AuthGuard,
     {
       provide: Hash, // Isso permite que qualquer um que extende Hash possa ser utilizado/injetado em algum lugar da aplicação
       useClass: BcryptAdapter, // Poderia ser utilizado um factory function que retorna um objeto com que segue a interface do Hash
@@ -22,5 +24,6 @@ import { UserController } from 'presentation/controllers/user.controller';
       useClass: JwtAdapter,
     },
   ],
+  exports: [AuthGuard, Jwt],
 })
 export class UserModule {}

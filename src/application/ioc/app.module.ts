@@ -8,6 +8,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TerminusModule } from '@nestjs/terminus';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CacheService } from 'infra/cache/cache-service';
+import { UserRepository } from 'infra/database/users/repositories/user.repository';
 import { setEnvironment } from 'infra/environments';
 import { HealthController } from 'presentation/controllers/health.controller';
 import { PetModule } from './pet.module';
@@ -26,9 +27,15 @@ import { UserModule } from './user.module';
       expandVariables: true,
       envFilePath: setEnvironment(),
     }),
-    TerminusModule,
+    {
+      module: TerminusModule,
+      imports: [
+        UserModule,
+        TypeOrmModule.forFeature([UserRepository]),
+      ],
+      controllers: [HealthController],
+    },
   ],
-  controllers: [HealthController],
   providers: [
     {
       provide: APP_INTERCEPTOR,
