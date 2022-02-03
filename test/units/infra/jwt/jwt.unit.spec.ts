@@ -1,5 +1,4 @@
 import { IJwtPayload } from 'application/protocols/jwt-payload.protocol';
-import { verify } from 'crypto';
 import { JwtAdapter } from 'infra/jwt/jwt-adapter';
 import jwt from 'jsonwebtoken';
 
@@ -58,13 +57,21 @@ describe('<Jwt Adapter>', () => {
       expect(verifySpy).toBeCalledWith('token', 'test_key');
     });
 
-    // it('Should return t', async () => {
-    //   const sut = makeSut();
-    //   const verifySpy = jest.spyOn(jwt, 'verify');
+    it('Should return true if verify return a string|payloads', async () => {
+      const sut = makeSut();
 
-    //   sut.verify('token');
+      const verifyResult = sut.verify('token');
+      expect(verifyResult).toBeTruthy();
+    });
 
-    //   expect(verifySpy).toBeCalledWith('token', 'test_key');
-    // });
+    it('Should return false if verify not return null', async () => {
+      const sut = makeSut();
+      jest
+        .spyOn(jwt, 'verify')
+        .mockImplementationOnce(() => Promise.resolve({}));
+
+      const verifyResult = await sut.verify('token');
+      expect(verifyResult).toBeFalsy();
+    });
   });
 });
