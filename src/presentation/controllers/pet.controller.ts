@@ -7,17 +7,22 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { PetService } from 'application/services/pet.service';
+import { AuthGuard } from 'infra/rest/guard/auth-guard';
+import { Roles } from 'presentation/decorators/roles.decorator';
 import AddPetRequestDto from 'shared/dtos/pet/AddPetRequestDto';
 import PetDto from 'shared/dtos/pet/PetDto';
 import UpdatePetRequestDto from 'shared/dtos/pet/UpdatePetRequestDto';
 
+@UseGuards(AuthGuard)
 @Controller('/pets')
 export class PetController {
   constructor(private petService: PetService) {}
 
   @Get()
+  @Roles('COMMON', 'CLERK')
   public async listPets(): Promise<PetDto[]> {
     return (await this.petService.listPets()).map((pet) =>
       PetDto.toDto(pet),
@@ -25,6 +30,7 @@ export class PetController {
   }
 
   @Get(':id')
+  @Roles('COMMON', 'CLERK')
   public async showById(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<PetDto> {
@@ -33,6 +39,7 @@ export class PetController {
   }
 
   @Post()
+  @Roles('CLERK')
   public async addPet(
     @Body() addPet: AddPetRequestDto,
   ): Promise<PetDto> {
@@ -42,6 +49,7 @@ export class PetController {
   }
 
   @Delete(':id')
+  @Roles('CLERK')
   public async deletePet(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<void> {
@@ -49,6 +57,7 @@ export class PetController {
   }
 
   @Put(':id')
+  @Roles('CLERK')
   public async updatePet(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updatePetRequestDto: UpdatePetRequestDto,

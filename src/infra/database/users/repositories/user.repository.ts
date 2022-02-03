@@ -18,7 +18,7 @@ export class UserRepository extends Repository<User> {
     return !!emailExists;
   }
 
-  async findByIdAndReturnRole(id: string): Promise<Role> {
+  async findByIdAndReturnRole(id: string) {
     const role = await this.createQueryBuilder('u')
       .select(['role.id', 'role.name'])
       .leftJoin('u.role', 'role')
