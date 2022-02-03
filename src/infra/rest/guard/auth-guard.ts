@@ -16,7 +16,9 @@ export class AuthGuard implements CanActivate {
     const bearer = request.headers.authorization;
     if (bearer) {
       const isValidToken = await this.Jwt.verify(bearer);
-      return isValidToken;
+      if (!isValidToken) {
+        throw new UnauthorizedException('You token is invalid');
+      }
     }
     throw new UnauthorizedException('You do not have token');
   }

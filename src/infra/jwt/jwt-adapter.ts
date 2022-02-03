@@ -16,14 +16,17 @@ export class JwtAdapter extends Jwt {
     return token;
   }
 
-  async verify(token: string): Promise<boolean> {
+  async verify(token: string): Promise<boolean | IJwtPayload> {
     const tokenFormated = formatJwtString(token);
-    const isValidToken = await jwt.verify(
+    const tokenResult = (await jwt.verify(
       tokenFormated,
       this.JWT_SECRET_KEY,
-    );
+    )) as IJwtPayload;
 
-    const invalid = !isEmptyObject(isValidToken);
-    return invalid;
+    const invalid = isEmptyObject(tokenResult);
+
+    if (invalid) return false;
+
+    return tokenResult;
   }
 }
