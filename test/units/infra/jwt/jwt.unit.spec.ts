@@ -18,40 +18,53 @@ jest.mock('jsonwebtoken', () => ({
 
 const makeSut = (): JwtAdapter => new JwtAdapter();
 
-describe('Jwt Adapter', () => {
-  test('Should call sign with correct values', async () => {
-    const sut = makeSut();
-    const signSpy = jest.spyOn(jwt, 'sign');
-    await sut.sign({ id: '12345' });
-    expect(signSpy).toBeCalled();
-    expect(signSpy).toBeCalledWith({ id: '12345' }, 'test_key', {
-      expiresIn: 3600,
+describe('<Jwt Adapter>', () => {
+  describe('<<sign>>', () => {
+    it('Should call sign with correct values', async () => {
+      const sut = makeSut();
+      const signSpy = jest.spyOn(jwt, 'sign');
+      await sut.sign({ id: '12345' });
+      expect(signSpy).toBeCalled();
+      expect(signSpy).toBeCalledWith({ id: '12345' }, 'test_key', {
+        expiresIn: 3600,
+      });
+    });
+    it('Should return a valid jwt token', async () => {
+      const sut = makeSut();
+      const signSpy = jest.spyOn(jwt, 'sign');
+      const signResult = await sut.sign({ id: '12345' });
+
+      expect(signSpy).toHaveReturnedWith(Promise.resolve('token'));
+      expect(signResult).toBe('token');
+    });
+
+    it('Should throws Error if jwtwebtoken throws', async () => {
+      const sut = makeSut();
+      jest.spyOn(jwt, 'sign').mockImplementationOnce(() => {
+        throw new Error();
+      });
+      const promise = sut.sign({ id: '12345' });
+      await expect(promise).rejects.toThrow();
     });
   });
-  test('Should return a valid jwt token', async () => {
-    const sut = makeSut();
-    const signSpy = jest.spyOn(jwt, 'sign');
-    const signResult = await sut.sign({ id: '12345' });
 
-    expect(signSpy).toHaveReturnedWith(Promise.resolve('token'));
-    expect(signResult).toBe('token');
-  });
+  describe('<<verify>>', () => {
+    it('Should call verify with correct values', async () => {
+      const sut = makeSut();
+      const verifySpy = jest.spyOn(jwt, 'verify');
 
-  test('Should throws Error if jwtwebtoken throws', async () => {
-    const sut = makeSut();
-    jest.spyOn(jwt, 'sign').mockImplementationOnce(() => {
-      throw new Error();
+      sut.verify('token');
+
+      expect(verifySpy).toBeCalledWith('token', 'test_key');
     });
-    const promise = sut.sign({ id: '12345' });
-    await expect(promise).rejects.toThrow();
-  });
 
-  test('Should call verify with correct values', async () => {
-    const sut = makeSut();
-    const verifySpy = jest.spyOn(jwt, 'verify');
+    // it('Should return t', async () => {
+    //   const sut = makeSut();
+    //   const verifySpy = jest.spyOn(jwt, 'verify');
 
-    sut.verify('token');
+    //   sut.verify('token');
 
-    expect(verifySpy).toBeCalledWith('token', 'test_key');
+    //   expect(verifySpy).toBeCalledWith('token', 'test_key');
+    // });
   });
 });
