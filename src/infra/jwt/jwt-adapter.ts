@@ -14,4 +14,11 @@ export class JwtAdapter extends Jwt {
 
     return token;
   }
+
+  async verify(token: string): Promise<boolean> {
+    const isValidToken = jwt.verify(
+      token,
+      process.env.JWT_SECRET_KEY || 'test_key',
+    );
+  }
 }
