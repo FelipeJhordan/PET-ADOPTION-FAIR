@@ -10,6 +10,8 @@ import { IJwtPayload } from 'application/protocols/jwt-payload.protocol';
 import { Jwt } from 'application/protocols/jwt.protocol';
 import { Request, Response } from 'express';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
+import { callError } from './utils/error-messages';
+import { verifyRoleMatch } from './utils/verify-role';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -29,7 +31,7 @@ export class AuthGuard implements CanActivate {
         bearer,
       );
       if (!validToken) {
-        throw new UnauthorizedException('You token is invalid');
+        throw callError['tokenInvalid'];
       }
       const id = validToken['id'];
       const role = await this.userRepository.findByIdAndReturnRole(
@@ -41,15 +43,8 @@ export class AuthGuard implements CanActivate {
         context.getHandler(),
       );
       const roleName: string = role.role_name;
-      if (
-        !(
-          roleName.includes('ADMIN') ||
-          requiredRoles.some((r) => r === roleName)
-        )
-      ) {
-        throw new UnauthorizedException(
-          'You are not authorized for this action',
-        );
+      if (!verifyRoleMatch(roleName, requiredRoles)) {
+        throw callError['noAuthorized'];
       }
 
       response.setHeader(
@@ -59,6 +54,6 @@ export class AuthGuard implements CanActivate {
 
       return true;
     }
-    throw new UnauthorizedException('You do not have token');
+    throw callError['noToken'];
   }
 }

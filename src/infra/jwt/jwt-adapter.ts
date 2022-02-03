@@ -18,15 +18,18 @@ export class JwtAdapter extends Jwt {
 
   async verify(token: string): Promise<boolean | IJwtPayload> {
     const tokenFormated = formatJwtString(token);
-    const tokenResult = (await jwt.verify(
-      tokenFormated,
-      this.JWT_SECRET_KEY,
-    )) as IJwtPayload;
+    try {
+      const tokenResult = (await jwt.verify(
+        tokenFormated,
+        this.JWT_SECRET_KEY,
+      )) as IJwtPayload;
+      const invalid = isEmptyObject(tokenResult);
 
-    const invalid = isEmptyObject(tokenResult);
+      if (invalid) return false;
 
-    if (invalid) return false;
-
-    return tokenResult;
+      return tokenResult;
+    } catch (e) {
+      return false;
+    }
   }
 }
