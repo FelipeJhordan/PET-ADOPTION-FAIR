@@ -26,6 +26,7 @@ export class AuthGuard implements CanActivate {
     const response: Response = context.switchToHttp().getResponse();
 
     const bearer = request.headers.authorization;
+
     if (bearer) {
       const validToken: boolean | IJwtPayload = await this.Jwt.verify(
         bearer,
@@ -34,26 +35,29 @@ export class AuthGuard implements CanActivate {
         throw callError['tokenInvalid'];
       }
       const id = validToken['id'];
-      const role = await this.userRepository.findByIdAndReturnRole(
-        id,
-      );
+
+      const { role_name: roleName } =
+        await this.userRepository.findByIdAndReturnRole(id);
 
       const requiredRoles = await this.refletor.get<string[]>(
         'roles',
         context.getHandler(),
       );
-      const roleName: string = role.role_name;
+
       if (!verifyRoleMatch(roleName, requiredRoles)) {
         throw callError['noAuthorized'];
       }
 
-      response.setHeader(
-        'Authorization',
-        'Bearer ' + (await this.Jwt.sign({ id })),
-      );
+      await this.generateNewToken(id, response);
 
       return true;
     }
     throw callError['noToken'];
+  }
+
+  private async generateNewToken(id: string, response: Response) {
+    const newToken = await this.Jwt.sign({ id });
+
+    response.setHeader('Authorization', 'Bearer ' + newToken);
   }
 }
