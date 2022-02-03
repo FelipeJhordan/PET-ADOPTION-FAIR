@@ -4,23 +4,19 @@ import jwt from 'jsonwebtoken';
 import { isEmptyObject } from 'shared/utils/objectUtils';
 
 export class JwtAdapter extends Jwt {
+  private JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || 'test_key'; // poderia utilizar o configModule também ☣
+  private JWT_EXP = process.env.JWT_EXP || 3600;
+
   async sign(payload: IJwtPayload): Promise<string> {
-    const token = await jwt.sign(
-      payload,
-      process.env.JWT_SECRET_KEY || 'test_key',
-      {
-        expiresIn: process.env.JWT_EXP || 3600,
-      },
-    );
+    const token = await jwt.sign(payload, this.JWT_SECRET_KEY, {
+      expiresIn: this.JWT_EXP,
+    });
 
     return token;
   }
 
   async verify(token: string): Promise<boolean> {
-    const isValidToken = await jwt.verify(
-      token,
-      process.env.JWT_SECRET_KEY || 'test_key',
-    );
+    const isValidToken = await jwt.verify(token, this.JWT_SECRET_KEY);
 
     const invalid = !isEmptyObject(isValidToken);
     return invalid;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { IJwtPayload } from 'application/protocols/jwt-payload.protocol';
 import { JwtAdapter } from 'infra/jwt/jwt-adapter';
 import jwt from 'jsonwebtoken';

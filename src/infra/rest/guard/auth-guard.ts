@@ -6,6 +6,7 @@ import {
 import { Request } from 'express';
 import { Observable } from 'rxjs';
 
+// Não precisa de  @Injectable !!
 export class AuthGuard implements CanActivate {
   constructor() {
     console.log('tou sendo chamado');
@@ -16,7 +17,6 @@ export class AuthGuard implements CanActivate {
     const request: Request = context.switchToHttp().getRequest();
 
     const token = request.headers.authorization;
-    console.log(token);
     if (token) {
       return true;
     }
