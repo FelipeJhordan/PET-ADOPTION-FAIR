@@ -8,7 +8,7 @@ import { Reflector } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IJwtPayload } from 'application/protocols/jwt-payload.protocol';
 import { Jwt } from 'application/protocols/jwt.protocol';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
 
 @Injectable()
@@ -21,6 +21,7 @@ export class AuthGuard implements CanActivate {
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
+    const response: Response = context.switchToHttp().getResponse();
 
     const bearer = request.headers.authorization;
     if (bearer) {
@@ -41,13 +42,20 @@ export class AuthGuard implements CanActivate {
       );
       const roleName: string = role.role_name;
       if (
-        roleName.includes('ADMIN') ||
-        !requiredRoles.some((r) => r === roleName)
+        !(
+          roleName.includes('ADMIN') ||
+          requiredRoles.some((r) => r === roleName)
+        )
       ) {
         throw new UnauthorizedException(
           'You are not authorized for this action',
         );
       }
+
+      response.setHeader(
+        'Authorization',
+        'Bearer ' + (await this.Jwt.sign({ id })),
+      );
 
       return true;
     }
