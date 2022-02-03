@@ -1,6 +1,7 @@
 import { IJwtPayload } from 'application/protocols/jwt-payload.protocol';
 import { Jwt } from 'application/protocols/jwt.protocol';
 import jwt from 'jsonwebtoken';
+import { formatJwtString } from 'shared/utils';
 import { isEmptyObject } from 'shared/utils/objectUtils';
 
 export class JwtAdapter extends Jwt {
@@ -16,7 +17,11 @@ export class JwtAdapter extends Jwt {
   }
 
   async verify(token: string): Promise<boolean> {
-    const isValidToken = await jwt.verify(token, this.JWT_SECRET_KEY);
+    const tokenFormated = formatJwtString(token);
+    const isValidToken = await jwt.verify(
+      tokenFormated,
+      this.JWT_SECRET_KEY,
+    );
 
     const invalid = !isEmptyObject(isValidToken);
     return invalid;
