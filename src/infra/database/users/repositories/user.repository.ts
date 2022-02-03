@@ -1,3 +1,4 @@
+import { Role } from 'domain/models/role';
 import { User } from 'domain/models/user';
 import { EntityRepository, Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
@@ -15,5 +16,14 @@ export class UserRepository extends Repository<User> {
     });
 
     return !!emailExists;
+  }
+
+  async findByIdAndReturnRole(id: string): Promise<Role> {
+    const role = await this.createQueryBuilder('u')
+      .select(['role.id', 'role.name'])
+      .leftJoin('u.role', 'role')
+      .where('u.id = :userId', { userId: id })
+      .execute();
+    return role[0];
   }
 }

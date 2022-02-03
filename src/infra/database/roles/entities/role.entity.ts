@@ -1,5 +1,4 @@
 import { Role } from 'domain/models/role';
-import { User } from 'domain/models/user';
 import { EntitySchema } from 'typeorm';
 
 export const RoleEntity = new EntitySchema<Role>({
@@ -10,7 +9,7 @@ export const RoleEntity = new EntitySchema<Role>({
     id: {
       type: String,
       primary: true,
-      generated: 'uuid',
+      generated: 'rowid',
     },
     name: {
       type: String,

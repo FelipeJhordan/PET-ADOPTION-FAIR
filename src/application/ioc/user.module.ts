@@ -24,6 +24,6 @@ import { UserController } from 'presentation/controllers/user.controller';
       useClass: JwtAdapter,
     },
   ],
-  exports: [AuthGuard],
+  exports: [AuthGuard, Jwt],
 })
 export class UserModule {}
