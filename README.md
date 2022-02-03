@@ -12,6 +12,7 @@
 - Aplicar testes unitários ✔
 - Aplicar testes de integração ✔
 - Aplicar TDD ✔
+- Por no ar ( Por que não ? )
 - Melhorar Arquitetura?
 
 ### Objetivos de negócio
