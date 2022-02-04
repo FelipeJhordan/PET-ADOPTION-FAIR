@@ -121,13 +121,23 @@ describe('Pet service', () => {
     );
   });
 
-  it('Should petService.adoptPet return a  pet ', async () => {
+  it('Should petRepository return a  pet  inside petService.adoptPet', async () => {
     const findOneSpy = jest
       .spyOn(petRepository, 'findOne')
       .mockReturnValueOnce(Promise.resolve(petMock));
 
     await petService.adoptPet(mockAdoptPetServiceParams);
 
-    await expect(findOneSpy).toBeNull();
+    await expect(findOneSpy).not.toReturnWith(null);
+  });
+  it('Should petService.adoptPet throw NotFound if repository not found pet', async () => {
+    const findOneSpy = jest
+      .spyOn(petRepository, 'findOne')
+      .mockReturnValueOnce(Promise.resolve(null));
+
+    const promise = petService.adoptPet(mockAdoptPetServiceParams);
+    expect(promise).rejects.toThrow(
+      new NotFoundException('Pet não encontrado.'),
+    );
   });
 });
