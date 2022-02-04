@@ -42,4 +42,9 @@ export const mockUpdatePetRequestDto: UpdatePetRequestDto = {
   name: 'Tobias',
 };
 
+export const mockAdoptPetServiceParams = {
+  id_user: 'id_user',
+  id_pet: 'id_pet',
+};
+
 export const petsMock: Pet[] = [petMock, petMock2];

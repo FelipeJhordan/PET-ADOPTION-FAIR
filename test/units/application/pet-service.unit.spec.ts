@@ -8,6 +8,7 @@ import {
   petsMock,
   mockAddPetRequestDTO,
   mockUpdatePetRequestDto,
+  mockAdoptPetServiceParams,
 } from '../mocks/pet/pet.mock';
 
 describe('Pet service', () => {
@@ -105,5 +106,18 @@ describe('Pet service', () => {
     });
 
     expect(response).rejects.toThrow(new NotFoundException());
+  });
+
+  it('Should petService.adoptPet is called it correct values ', async () => {
+    const findOneSpy = jest
+      .spyOn(petRepository, 'findOne')
+      .mockImplementationOnce(async () => Promise.resolve(petMock));
+
+    await petService.adoptPet(mockAdoptPetServiceParams);
+
+    expect(findOneSpy).toBeCalled();
+    expect(findOneSpy).toBeCalledWith(
+      mockAdoptPetServiceParams.id_pet,
+    );
   });
 });
