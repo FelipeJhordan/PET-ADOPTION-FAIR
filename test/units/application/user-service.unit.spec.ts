@@ -21,34 +21,7 @@ describe('<User service>', () => {
   let encrypt: Jwt;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      providers: [
-        UserService,
-        {
-          provide: UserRepository,
-          useFactory: () => ({
-            save: jest.fn((obj) => mockUser),
-            create: jest.fn(() => true),
-            findOne: jest.fn(() => mockUser),
-            find: jest.fn(() => mockUser),
-            update: jest.fn(() => true),
-            softDelete: jest.fn(() => true),
-            findByEmail: jest.fn(() => false),
-          }),
-        },
-        {
-          provide: Hash,
-          useFactory: () => ({
-            hash: jest.fn(() => true),
-            compare: jest.fn(() => true),
-          }),
-        },
-        {
-          provide: Jwt,
-          useFactory: () => ({
-            sign: jest.fn(() => 'jwt_value_key'),
-          }),
-        },
-      ],
+      providers: mockUserServiceParams(),
     }).compile();
     userRepository = module.get<UserRepository>(UserRepository);
     userService = module.get<UserService>(UserService);
@@ -61,7 +34,6 @@ describe('<User service>', () => {
       const user = await userService.register(
         mockUserRegisterRequestDto,
       );
-
       expect(user).toBeTruthy();
       expect(user.username).toBe('felipejhordan');
     });
