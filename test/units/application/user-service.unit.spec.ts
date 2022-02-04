@@ -32,7 +32,6 @@ describe('<User service>', () => {
             update: jest.fn(() => true),
             softDelete: jest.fn(() => true),
             findByEmail: jest.fn(() => false),
-            findByUsername: jest.fn(() => false),
           }),
         },
         {
@@ -57,152 +56,116 @@ describe('<User service>', () => {
   });
 
   describe('<<User Register>> ', () => {
-    try {
-      it('Should be return a valid user ', async () => {
-        const user = await userService.register(
-          mockUserRegisterRequestDto,
+    it('Should be return a valid user ', async () => {
+      const user = await userService.register(
+        mockUserRegisterRequestDto,
+      );
+
+      expect(user).toBeTruthy();
+      expect(user.username).toBe('felipejhordan');
+    });
+
+    it('Should be called with valid params', async () => {
+      const registerSpy = jest.spyOn(userService, 'register');
+
+      userService.register(mockUserRegisterRequestDto);
+
+      expect(registerSpy).toHaveBeenCalledWith(
+        mockUserRegisterRequestDto,
+      );
+    });
+
+    it('Should be call userRepository.findById with email and return false if email not is duplicate', async () => {
+      const findByIdSpy = jest.spyOn(userRepository, 'findByEmail');
+
+      await userService.register(mockUserRegisterRequestDto);
+
+      expect(findByIdSpy).toBeCalledTimes(1);
+      expect(findByIdSpy).toBeCalledWith(
+        mockUserRegisterRequestDto.email,
+      );
+      expect(findByIdSpy).toReturnWith(false);
+    }); // Ficou grande em
+
+    it('Should throw BadRequestException if exist a user with same email', async () => {
+      jest
+        .spyOn(userRepository, 'findByEmail')
+        .mockReturnValueOnce(Promise.resolve(true));
+
+      const promise = userService.register(
+        mockUserRegisterRequestDto,
+      );
+
+      expect(promise).rejects.toThrow();
+      expect(promise).rejects.toBeInstanceOf(BadRequestException);
+      expect(promise).rejects.toEqual(
+        new BadRequestException('Email já registrado no sistema.'),
+      );
+    });
+    it('Should call save user ', async () => {
+      const saveSpy = jest
+        .spyOn(userRepository, 'save')
+        .mockImplementationOnce(async () =>
+          Promise.resolve(mockUser),
         );
 
-        expect(user).toBeTruthy();
-        expect(user.username).toBe('felipejhordan');
-      });
+      await userService.register(mockUserRegisterRequestDto);
 
-      it('Should be called with valid params', async () => {
-        const registerSpy = jest.spyOn(userService, 'register');
+      expect(saveSpy).toBeCalled();
+    });
 
-        userService.register(mockUserRegisterRequestDto);
-
-        expect(registerSpy).toHaveBeenCalledWith(
-          mockUserRegisterRequestDto,
+    it('Should return saved user', async () => {
+      jest
+        .spyOn(userRepository, 'save')
+        .mockImplementationOnce(async () =>
+          Promise.resolve(mockUser),
         );
-      });
+      const user = await userService.register(
+        mockUserRegisterRequestDto,
+      );
 
-      it('Should be call userRepository.findById with email and return false if email not is duplicate', async () => {
-        const findByIdSpy = jest.spyOn(userRepository, 'findByEmail');
-
-        await userService.register(mockUserRegisterRequestDto);
-
-        expect(findByIdSpy).toBeCalledTimes(1);
-        expect(findByIdSpy).toBeCalledWith(
-          mockUserRegisterRequestDto.email,
+      expect(user).toBeTruthy();
+      expect(user.username).toEqual(mockUser.username);
+      expect(user.person).toBeTruthy();
+      expect(user.role).toBeTruthy();
+      expect(user.role.id).toBe(3);
+    });
+    it('Should return saved user', async () => {
+      jest
+        .spyOn(userRepository, 'save')
+        .mockImplementationOnce(async () =>
+          Promise.resolve(mockUser),
         );
-        expect(findByIdSpy).toReturnWith(false);
-      }); // Ficou grande em
+      const user = await userService.register(
+        mockUserRegisterRequestDto,
+      );
 
-      it('Should throw BadRequestException if exist a user with same email', async () => {
-        jest
-          .spyOn(userRepository, 'findByEmail')
-          .mockReturnValueOnce(Promise.resolve(true));
-
-        const promise = userService.register(
-          mockUserRegisterRequestDto,
+      expect(user).toBeTruthy();
+      expect(user.username).toEqual(mockUser.username);
+      expect(user.person).toBeTruthy();
+      expect(user.role).toBeTruthy();
+      expect(user.role.id).toBe(3);
+    });
+    it('Should throw if throw', async () => {
+      jest
+        .spyOn(userRepository, 'save')
+        .mockImplementationOnce(async () =>
+          Promise.reject(new Error()),
         );
+      const promise = userService.register(
+        mockUserRegisterRequestDto,
+      );
+      expect(promise).rejects.toThrow(Error);
+    });
 
-        expect(promise).rejects.toThrow();
-        expect(promise).rejects.toBeInstanceOf(BadRequestException);
-        expect(promise).rejects.toEqual(
-          new BadRequestException('Email já registrado no sistema.'),
-        );
-      });
-
-      it('Should be call userRepository.findById with username and return false if username not is duplicate', async () => {
-        const findByIdSpy = jest.spyOn(
-          userRepository,
-          'findByUsername',
-        );
-
-        await userService.register(mockUserRegisterRequestDto);
-
-        expect(findByIdSpy).toBeCalledTimes(1);
-        expect(findByIdSpy).toBeCalledWith(
-          mockUserRegisterRequestDto.username,
-        );
-        expect(findByIdSpy).toReturnWith(false);
-      }); // Ficou grande em
-      it('Should throw BadRequestException if exist a user with same username', async () => {
-        jest
-          .spyOn(userRepository, 'findByUsername')
-          .mockReturnValueOnce(Promise.resolve(true));
-
-        const promise = userService.register(
-          mockUserRegisterRequestDto,
-        );
-
-        expect(promise).rejects.toThrow();
-        expect(promise).rejects.toBeInstanceOf(BadRequestException);
-        expect(promise).rejects.toEqual(
-          new BadRequestException(
-            'Nome do usuário já registrado no sistema.',
-          ),
-        );
-      });
-      it('Should call save user ', async () => {
-        const saveSpy = jest
-          .spyOn(userRepository, 'save')
-          .mockImplementationOnce(async () =>
-            Promise.resolve(mockUser),
-          );
-
-        await userService.register(mockUserRegisterRequestDto);
-
-        expect(saveSpy).toBeCalled();
-      });
-
-      it('Should return saved user', async () => {
-        jest
-          .spyOn(userRepository, 'save')
-          .mockImplementationOnce(async () =>
-            Promise.resolve(mockUser),
-          );
-        const user = await userService.register(
-          mockUserRegisterRequestDto,
-        );
-
-        expect(user).toBeTruthy();
-        expect(user.username).toEqual(mockUser.username);
-        expect(user.person).toBeTruthy();
-        expect(user.role).toBeTruthy();
-        expect(user.role.id).toBe(3);
-      });
-      it('Should return saved user', async () => {
-        jest
-          .spyOn(userRepository, 'save')
-          .mockImplementationOnce(async () =>
-            Promise.resolve(mockUser),
-          );
-        const user = await userService.register(
-          mockUserRegisterRequestDto,
-        );
-
-        expect(user).toBeTruthy();
-        expect(user.username).toEqual(mockUser.username);
-        expect(user.person).toBeTruthy();
-        expect(user.role).toBeTruthy();
-        expect(user.role.id).toBe(3);
-      });
-      it('Should throw if throw', async () => {
-        jest
-          .spyOn(userRepository, 'save')
-          .mockImplementationOnce(async () =>
-            Promise.reject(new Error()),
-          );
-        const promise = userService.register(
-          mockUserRegisterRequestDto,
-        );
-        expect(promise).rejects.toThrow(Error);
-      });
-
-      it('Should call Hashing.hash with correct value', async () => {
-        const hashingSpy = jest.spyOn(hashing, 'hash');
-        await userService.register(mockUserRegisterRequestDto);
-        expect(hashingSpy).toBeCalled();
-        expect(hashingSpy).toBeCalledWith(
-          mockUserRegisterRequestDto.password,
-        );
-      });
-    } catch (e) {
-      console.log(e);
-    }
+    it('Should call Hashing.hash with correct value', async () => {
+      const hashingSpy = jest.spyOn(hashing, 'hash');
+      await userService.register(mockUserRegisterRequestDto);
+      expect(hashingSpy).toBeCalled();
+      expect(hashingSpy).toBeCalledWith(
+        mockUserRegisterRequestDto.password,
+      );
+    });
   });
 
   describe('<<User Login>> ', () => {
