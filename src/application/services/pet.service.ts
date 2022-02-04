@@ -81,14 +81,14 @@ export class PetService implements IPetUseCases {
 
     if (!petReturned)
       throw new NotFoundException('Pet não encontrado.');
-    if (petReturned.situation === SITUATION[SITUATION.ADOPTED])
+    if (petReturned.situation === SITUATION.ADOPTED)
       throw new BadRequestException('Este pet já está adotado.');
 
     this.petRepository.update(id_pet, {
       user: {
         id: id_user,
       },
-      situation: SITUATION[SITUATION.IN_PROCESS],
+      situation: SITUATION.HOMELESS,
     });
   }
 }

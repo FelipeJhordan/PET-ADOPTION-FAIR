@@ -52,7 +52,7 @@ export const PetEntity = new EntitySchema<Pet>({
 
   relations: {
     user: {
-      type: 'one-to-many',
+      type: 'many-to-one',
       target: 'User',
       joinColumn: {
         name: 'id_user',
@@ -60,7 +60,7 @@ export const PetEntity = new EntitySchema<Pet>({
       },
       eager: true,
       cascade: ['recover'],
-      inverseSide: 'pet',
+      inverseSide: 'pets',
     },
   },
 });

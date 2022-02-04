@@ -31,5 +31,5 @@ describe('PetsController Test', () => {
 
   // TODO
   // Should have here all methods in presentation layer pets
-  // like as add, remove, update, show
+  // like as add, remove, update, show, but I am with a lot sloth
 });

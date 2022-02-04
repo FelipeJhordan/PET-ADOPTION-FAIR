@@ -61,5 +61,10 @@ export const UserEntity = new EntitySchema<User>({
       cascade: ['insert', 'recover'],
       inverseSide: 'user',
     },
+
+    pets: {
+      type: 'one-to-many',
+      target: 'Pet',
+    },
   },
 });

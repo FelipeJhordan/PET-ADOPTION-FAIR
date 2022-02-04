@@ -5,13 +5,16 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Put,
   UseGuards,
 } from '@nestjs/common';
 import { PetService } from 'application/services/pet.service';
+import { User } from 'domain/models/user';
 import { AuthGuard } from 'infra/rest/guard/auth-guard';
 import { Roles } from 'presentation/decorators/roles.decorator';
+import { UserDecorator } from 'presentation/decorators/user.decorator';
 import AddPetRequestDto from 'shared/dtos/pet/AddPetRequestDto';
 import PetDto from 'shared/dtos/pet/PetDto';
 import UpdatePetRequestDto from 'shared/dtos/pet/UpdatePetRequestDto';
@@ -67,5 +70,14 @@ export class PetController {
       updatePetRequestDto,
     );
     return PetDto.toDto(pet);
+  }
+
+  @Patch(':id/adopt')
+  @Roles('USER', 'CLERK')
+  public async adoptedPet(
+    @Param('id') id_pet: string,
+    @UserDecorator() id_user: string,
+  ) {
+    await this.petService.adoptPet({ id_pet, id_user });
   }
 }

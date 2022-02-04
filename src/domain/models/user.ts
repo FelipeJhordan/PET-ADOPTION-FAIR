@@ -1,4 +1,5 @@
 import { Person } from './person';
+import { Pet } from './pet';
 import { Role } from './role';
 
 export class User {
@@ -10,6 +11,7 @@ export class User {
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
+  pets?: Pet[];
   constructor(
     username: string,
     password: string,
@@ -19,6 +21,7 @@ export class User {
     deletedAt?: Date,
     createdAt?: Date,
     updatedAt?: Date,
+    pets?: Pet[],
   ) {
     this.username = username;
     this.password = password;
@@ -28,5 +31,6 @@ export class User {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.deletedAt = deletedAt;
+    this.pets = pets;
   }
 }
