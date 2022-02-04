@@ -75,6 +75,6 @@ export class PetService implements IPetUseCases {
     id_user,
   }: IAdoptPetParams): Promise<void> {
     // não preciso verificar o usuário pois se chegou aqui ele passou pelo authGuard
-    await this.petRepository.findOne(id_pet);
+    const petReturned = await this.petRepository.findOne(id_pet);
   }
 }

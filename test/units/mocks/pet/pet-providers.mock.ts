@@ -6,6 +6,7 @@ import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
 import { PetController } from 'presentation/controllers/pet.controller';
 import { mockUser } from '../user/user.mock';
+import { petMock } from './pet.mock';
 
 export const mockPetServiceProviders = (): Array<any> => {
   const mock = [
@@ -15,7 +16,7 @@ export const mockPetServiceProviders = (): Array<any> => {
       useFactory: () => ({
         save: jest.fn(() => true),
         findOne: jest.fn(() => true),
-        find: jest.fn(() => true),
+        find: jest.fn(() => petMock),
         update: jest.fn(() => true),
         softDelete: jest.fn(() => true),
         updateAndGetPetById: jest.fn(() => true),
