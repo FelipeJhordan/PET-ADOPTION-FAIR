@@ -7,6 +7,7 @@ import { Hash } from 'application/protocols/hash.protocol';
 import { Jwt } from 'application/protocols/jwt.protocol';
 import { UserService } from 'application/services/user.service';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
+import { mockUserServiceParams } from '../mocks/repository.mock';
 import {
   mockLoginParam,
   mockUser,
