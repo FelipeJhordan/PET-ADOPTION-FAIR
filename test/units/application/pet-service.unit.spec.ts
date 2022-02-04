@@ -1,6 +1,10 @@
-import { NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { PetService } from 'application/services/pet.service';
+import { SITUATION } from 'domain/models/enums/situation.enum';
 import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
 import { mockPetServiceProviders } from '../mocks/pet/pet-providers.mock';
 import {
@@ -138,6 +142,21 @@ describe('Pet service', () => {
     const promise = petService.adoptPet(mockAdoptPetServiceParams);
     expect(promise).rejects.toThrow(
       new NotFoundException('Pet não encontrado.'),
+    );
+  });
+  it('Should throw if pet situation is ADOPTED  ', async () => {
+    const findOneSpy = jest
+      .spyOn(petRepository, 'findOne')
+      .mockImplementationOnce(async () =>
+        Promise.resolve({
+          ...petMock,
+          situation: SITUATION[SITUATION.ADOPTED],
+        }),
+      );
+
+    const promise = petService.adoptPet(mockAdoptPetServiceParams);
+    expect(promise).rejects.toThrow(
+      new BadRequestException('Este pet já está adotado.'),
     );
   });
 });
