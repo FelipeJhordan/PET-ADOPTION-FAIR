@@ -120,4 +120,14 @@ describe('Pet service', () => {
       mockAdoptPetServiceParams.id_pet,
     );
   });
+
+  it('Should petService.adoptPet return a  pet ', async () => {
+    const findOneSpy = jest
+      .spyOn(petRepository, 'findOne')
+      .mockReturnValueOnce(Promise.resolve(petMock));
+
+    await petService.adoptPet(mockAdoptPetServiceParams);
+
+    await expect(findOneSpy).toBeNull();
+  });
 });
