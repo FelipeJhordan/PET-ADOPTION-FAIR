@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Pet } from 'domain/models/pet';
+import { IAdoptPetParams } from 'domain/protocols/pets/adopt-pet-params';
 import { IPetUseCases } from 'domain/usecases/pets/pets-usecases';
 import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
 import AddPetRequestDto from 'shared/dtos/pet/AddPetRequestDto';
@@ -67,5 +68,13 @@ export class PetService implements IPetUseCases {
     if (!pet) throw new NotFoundException();
 
     return pet;
+  }
+
+  async adoptPet({
+    id_pet,
+    id_user,
+  }: IAdoptPetParams): Promise<void> {
+    // não preciso verificar o usuário pois se chegou aqui ele passou pelo authGuard
+    await this.petRepository.findOne(id_pet);
   }
 }
