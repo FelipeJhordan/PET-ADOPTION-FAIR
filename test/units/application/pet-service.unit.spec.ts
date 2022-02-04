@@ -7,7 +7,7 @@ import {
   petsMock,
   mockAddPetRequestDTO,
   mockUpdatePetRequestDto,
-} from '../mocks/pet.mock';
+} from '../mocks/pet/pet.mock';
 
 describe('Pet service', () => {
   let petRepository: PetRepository;

@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { setEnvironment } from 'infra/environments';
 import { ConfigModule } from '@nestjs/config';
 import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
-import { mockAddPetRequestDTO } from '../units/mocks/pet.mock';
+import { mockAddPetRequestDTO } from '../units/mocks/pet/pet.mock';
 import { Repository } from 'typeorm';
 import { Pet } from 'domain/models/pet';
 

@@ -9,7 +9,7 @@ import request from 'supertest';
 import {
   mockLoginParamController,
   mockUserRegisterRequestDto,
-} from '../units/mocks/user.mock';
+} from '../units/mocks/user/user.mock';
 
 describe(' (e2e) ', () => {
   let app: INestApplication;

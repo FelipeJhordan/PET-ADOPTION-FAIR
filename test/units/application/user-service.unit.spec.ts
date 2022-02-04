@@ -7,12 +7,12 @@ import { Hash } from 'application/protocols/hash.protocol';
 import { Jwt } from 'application/protocols/jwt.protocol';
 import { UserService } from 'application/services/user.service';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
-import { mockUserServiceParams } from '../mocks/repository.mock';
+import { mockUserServiceParams } from '../mocks/user/user-providers.mock';
 import {
   mockLoginParam,
   mockUser,
   mockUserRegisterRequestDto,
-} from '../mocks/user.mock';
+} from '../mocks/user/user.mock';
 
 describe('<User service>', () => {
   let userRepository: UserRepository;

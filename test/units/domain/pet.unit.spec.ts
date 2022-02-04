@@ -1,5 +1,5 @@
 import { Pet } from 'domain/models/pet';
-import { petMock } from '../mocks/pet.mock';
+import { petMock } from '../mocks/pet/pet.mock';
 
 describe('Pet tests', () => {
   const petmocked = petMock;

@@ -8,7 +8,7 @@ import {
   mockLoginResponse,
   mockUser,
   mockUserRegisterRequestDto,
-} from '../mocks/user.mock';
+} from '../mocks/user/user.mock';
 import { plainToInstance } from 'class-transformer';
 
 describe('<User Controller>', () => {

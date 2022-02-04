@@ -1,8 +1,8 @@
 import { Test } from '@nestjs/testing';
 import { PetService } from 'application/services/pet.service';
 import { PetController } from 'presentation/controllers/pet.controller';
-import { petsMock } from '../mocks/pet.mock';
-import { mockPetServiceParams } from '../mocks/repository.mock';
+import { mockPetServiceParams } from '../mocks/pet/pet-providers.mock';
+import { petsMock } from '../mocks/pet/pet.mock';
 
 describe('PetsController Test', () => {
   let petController: PetController;
