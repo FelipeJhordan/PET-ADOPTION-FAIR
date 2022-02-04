@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Injectable,
   Logger,
   NotFoundException,
@@ -12,6 +11,7 @@ import { IPetUseCases } from 'domain/usecases/pets/pets-usecases';
 import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
 import AddPetRequestDto from 'shared/dtos/pet/AddPetRequestDto';
 import UpdatePetRequestDto from 'shared/dtos/pet/UpdatePetRequestDto';
+import { adoptionSituationException } from './utils/adoption-situation.conditional';
 
 @Injectable()
 export class PetService implements IPetUseCases {
@@ -81,14 +81,12 @@ export class PetService implements IPetUseCases {
 
     if (!petReturned)
       throw new NotFoundException('Pet não encontrado.');
-    if (petReturned.situation === SITUATION.ADOPTED)
-      throw new BadRequestException('Este pet já está adotado.');
-
-    this.petRepository.update(id_pet, {
+    adoptionSituationException(petReturned.situation);
+    const d = await this.petRepository.update(id_pet, {
       user: {
         id: id_user,
       },
-      situation: SITUATION.HOMELESS,
+      situation: SITUATION.IN_PROCESS,
     });
   }
 }
