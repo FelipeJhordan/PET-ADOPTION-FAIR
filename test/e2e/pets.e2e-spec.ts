@@ -13,13 +13,15 @@ import { mockUserClerk } from '../units/mocks/user/user.mock';
 import { Jwt } from 'application/protocols/jwt.protocol';
 import { JwtAdapter } from 'infra/jwt/jwt-adapter';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
-import { UserModule } from 'application/ioc/user.module';
+import { SITUATION } from 'domain/models/enums/situation.enum';
 
+// não recomendado pois infrige o principio de unica reponsabilidade, porem blz
 const findFirstPetAndReturnId = async (
   repository: Repository<Pet>,
-): Promise<string> => {
+  allData?: boolean,
+): Promise<string | Pet> => {
   const pet = await repository.find();
-  return pet[0]?.id;
+  return allData ? pet[0] : pet[0]?.id;
 };
 
 describe('  (e2e)', () => {
@@ -109,10 +111,23 @@ describe('  (e2e)', () => {
       deletedAt: body.deletedAt,
     });
   });
+  it('/pets/:id (PATCH)', async () => {
+    const uuidPet = await findFirstPetAndReturnId(petRepository);
+    await request(app.getHttpServer())
+      .patch('/pets/' + uuidPet + '/adopt')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(HttpStatus.OK);
 
+    const data = (await findFirstPetAndReturnId(
+      petRepository,
+      true,
+    )) as Pet;
+
+    expect(data.situation).toEqual(SITUATION.IN_PROCESS);
+  });
   it('/pets/:id (DELETE)', async () => {
     const uuidPet = await findFirstPetAndReturnId(petRepository);
-    const { body } = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .delete('/pets/' + uuidPet)
       .set('Authorization', `Bearer ${token}`)
       .expect(HttpStatus.OK);
@@ -124,6 +139,7 @@ describe('  (e2e)', () => {
 
   afterAll(async () => {
     await petRepository.query('DELETE FROM pets;');
+    await petRepository.query('DELETE FROM users;');
     await app.close();
   });
 });
