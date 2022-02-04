@@ -2,7 +2,6 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -50,6 +49,7 @@ export class AuthGuard implements CanActivate {
 
       await this.generateNewToken(id, response);
 
+      request['user'] = id;
       return true;
     }
     throw callError['noToken'];
