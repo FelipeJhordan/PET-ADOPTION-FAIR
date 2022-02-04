@@ -1,9 +1,11 @@
 import {
+  BadRequestException,
   Injectable,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SITUATION } from 'domain/models/enums/situation.enum';
 import { Pet } from 'domain/models/pet';
 import { IAdoptPetParams } from 'domain/protocols/pets/adopt-pet-params';
 import { IPetUseCases } from 'domain/usecases/pets/pets-usecases';
@@ -78,5 +80,7 @@ export class PetService implements IPetUseCases {
     const petReturned = await this.petRepository.findOne(id_pet);
     if (!petReturned)
       throw new NotFoundException('Pet não encontrado.');
+    if (petReturned.situation === SITUATION[SITUATION.ADOPTED])
+      throw new BadRequestException('Este pet já está adotado.');
   }
 }
