@@ -9,6 +9,11 @@ import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
 import { mockAddPetRequestDTO } from '../units/mocks/pet/pet.mock';
 import { Repository } from 'typeorm';
 import { Pet } from 'domain/models/pet';
+import { mockUserClerk } from '../units/mocks/user/user.mock';
+import { Jwt } from 'application/protocols/jwt.protocol';
+import { JwtAdapter } from 'infra/jwt/jwt-adapter';
+import { UserRepository } from 'infra/database/users/repositories/user.repository';
+import { UserModule } from 'application/ioc/user.module';
 
 const findFirstPetAndReturnId = async (
   repository: Repository<Pet>,
@@ -20,7 +25,9 @@ const findFirstPetAndReturnId = async (
 describe('  (e2e)', () => {
   let app: INestApplication;
   let petRepository: PetRepository;
-
+  let userRepository: UserRepository;
+  let encrypt: Jwt;
+  let token: string;
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       imports: [
@@ -28,17 +35,29 @@ describe('  (e2e)', () => {
         TypeOrmModule.forRoot({
           synchronize: true,
         }),
+        TypeOrmModule.forFeature([UserRepository]),
         ConfigModule.forRoot({
           isGlobal: true,
           expandVariables: true,
           envFilePath: setEnvironment(),
         }),
       ],
+      providers: [
+        {
+          provide: Jwt,
+          useClass: JwtAdapter,
+        },
+      ],
     }).compile();
 
     app = module.createNestApplication();
     await app.init();
     petRepository = module.get<PetRepository>(PetRepository);
+    userRepository = module.get<UserRepository>(UserRepository);
+    encrypt = module.get<Jwt>(Jwt);
+
+    const userSaved = await userRepository.save(mockUserClerk);
+    token = await encrypt.sign({ id: userSaved.id });
   });
 
   it('/pets (POST)', async () => {
@@ -46,8 +65,8 @@ describe('  (e2e)', () => {
       .post('/pets')
       .send(mockAddPetRequestDTO)
       .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect(HttpStatus.CREATED);
+      .set('Authorization', `Bearer ${token}`)
+      .expect('Content-Type', /json/);
 
     expect(body.state).toBeTruthy();
     expect(body.breed).toBe(mockAddPetRequestDTO.breed);
@@ -55,6 +74,7 @@ describe('  (e2e)', () => {
   it('/pets (GET)', async () => {
     const { body } = await request(app.getHttpServer())
       .get('/pets')
+      .set('Authorization', `Bearer ${token}`)
       .expect(HttpStatus.OK);
 
     expect(body).toHaveLength(1);
@@ -74,6 +94,8 @@ describe('  (e2e)', () => {
     const uuidPet = await findFirstPetAndReturnId(petRepository);
     const { body } = await request(app.getHttpServer())
       .get('/pets/' + uuidPet)
+      .set('Authorization', `Bearer ${token}`)
+
       .expect(HttpStatus.OK);
 
     expect(body).toBeTruthy();
@@ -92,6 +114,7 @@ describe('  (e2e)', () => {
     const uuidPet = await findFirstPetAndReturnId(petRepository);
     const { body } = await request(app.getHttpServer())
       .delete('/pets/' + uuidPet)
+      .set('Authorization', `Bearer ${token}`)
       .expect(HttpStatus.OK);
 
     const newIdSearch = await findFirstPetAndReturnId(petRepository);

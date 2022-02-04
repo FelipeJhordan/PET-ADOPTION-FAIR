@@ -1,4 +1,4 @@
-import { ClassTransformer, plainToClass } from 'class-transformer';
+import { plainToClass } from 'class-transformer';
 import { randomUUID } from 'crypto';
 import { ROLE } from 'domain/models/enums/role.enum';
 import { Person } from 'domain/models/person';
@@ -24,6 +24,22 @@ export const mockUser: User = {
   username: 'felipejhordan',
   password: '123',
   role: new Role(ROLE[ROLE.COMMON]),
+  person: new Person(
+    'Rua Mônica Machiyama',
+    'felipe jhordan',
+    'felipejordan.alves@gmail.com',
+    '3499757878',
+  ),
+  createdAt: date,
+  updatedAt: date,
+  deletedAt: null,
+};
+
+export const mockUserClerk: User = {
+  id: randomUUID(),
+  username: 'felipejhordan',
+  password: '123',
+  role: new Role(ROLE[ROLE.CLERK]),
   person: new Person(
     'Rua Mônica Machiyama',
     'felipe jhordan',
