@@ -126,9 +126,7 @@ describe('Pet service', () => {
   });
 
   it('Should petRepository return a  pet  inside petService.adoptPet', async () => {
-    const findOneSpy = jest
-      .spyOn(petRepository, 'findOne')
-      .mockReturnValueOnce(Promise.resolve(petMock));
+    const findOneSpy = jest.spyOn(petRepository, 'findOne');
 
     await petService.adoptPet(mockAdoptPetServiceParams);
 
@@ -145,7 +143,7 @@ describe('Pet service', () => {
     );
   });
   it('Should throw if pet situation is ADOPTED  ', async () => {
-    const findOneSpy = jest
+    jest
       .spyOn(petRepository, 'findOne')
       .mockImplementationOnce(async () =>
         Promise.resolve({
@@ -158,5 +156,16 @@ describe('Pet service', () => {
     expect(promise).rejects.toThrow(
       new BadRequestException('Este pet já está adotado.'),
     );
+  });
+
+  it('Should useService.adoptPet call updatePet with correct values', async () => {
+    const updatePetSpy = jest.spyOn(petRepository, 'update');
+
+    await petService.adoptPet(mockAdoptPetServiceParams);
+    const { id_pet, id_user } = mockAdoptPetServiceParams;
+    expect(updatePetSpy).toBeCalledWith(id_pet, {
+      user: { id: id_user },
+      situation: SITUATION[SITUATION.IN_PROCESS],
+    });
   });
 });
