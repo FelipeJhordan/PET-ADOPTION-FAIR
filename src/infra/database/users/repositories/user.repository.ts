@@ -1,4 +1,3 @@
-import { Role } from 'domain/models/role';
 import { User } from 'domain/models/user';
 import { EntityRepository, Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
@@ -16,6 +15,16 @@ export class UserRepository extends Repository<User> {
     });
 
     return !!emailExists;
+  }
+
+  async findByUsername(username: string): Promise<boolean> {
+    const usernameExists = await this.findOne({
+      where: {
+        username,
+      },
+    });
+
+    return !!usernameExists;
   }
 
   async findByIdAndReturnRole(id: string) {

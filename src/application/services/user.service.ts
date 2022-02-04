@@ -61,6 +61,14 @@ export class UserService implements IUserUseCases {
       throw new BadRequestException(
         'Email já registrado no sistema.',
       );
+
+    const usernameExists = await this.userRepository.findByUsername(
+      username,
+    );
+    if (usernameExists)
+      throw new BadRequestException(
+        'Nome do usuário já registrado no sistema.',
+      );
     const hashedPassword = await this.Hashing.hash(password); // ficou meio ruim o nome da classe kk
     const userBeforeSave = this.userRepository.create({
       username,
