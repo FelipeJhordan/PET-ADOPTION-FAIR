@@ -2,12 +2,32 @@ import { Hash } from 'application/protocols/hash.protocol';
 import { Jwt } from 'application/protocols/jwt.protocol';
 import { PetService } from 'application/services/pet.service';
 import { UserService } from 'application/services/user.service';
+import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
 import { PetController } from 'presentation/controllers/pet.controller';
 import { mockUser } from '../user/user.mock';
 
+export const mockPetServiceProviders = (): Array<any> => {
+  const mock = [
+    PetService,
+    {
+      provide: PetRepository,
+      useFactory: () => ({
+        save: jest.fn(() => true),
+        findOne: jest.fn(() => true),
+        find: jest.fn(() => true),
+        update: jest.fn(() => true),
+        softDelete: jest.fn(() => true),
+        updateAndGetPetById: jest.fn(() => true),
+      }),
+    },
+  ];
+
+  return mock;
+};
+
 // Precisa adicionar os providers necessários do authGuard para validar as rotas
-export const mockPetServiceParams = (): Array<any> => {
+export const mockPetControllerProviders = (): Array<any> => {
   const mock = [
     PetController,
     {

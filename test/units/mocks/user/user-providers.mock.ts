@@ -1,12 +1,11 @@
 import { Jwt } from 'application/protocols/jwt.protocol';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
-import { mockUser } from './user.mock';
+import { mockLoginResponse, mockUser } from './user.mock';
 import { UserService } from 'application/services/user.service';
 import { Hash } from 'application/protocols/hash.protocol';
-import { PetController } from 'presentation/controllers/pet.controller';
-import { PetService } from 'application/services/pet.service';
+import { UserController } from 'presentation/controllers/user.controller';
 
-export const mockUserServiceParams = (): Array<any> => {
+export const mockUserServiceProviders = (): Array<any> => {
   const mock = [
     {
       provide: UserRepository,
@@ -36,5 +35,20 @@ export const mockUserServiceParams = (): Array<any> => {
     },
     UserService,
   ];
+  return mock;
+};
+
+export const mockUserControllerProviders = (): Array<any> => {
+  const mock = [
+    UserController,
+    {
+      provide: UserService,
+      useFactory: () => ({
+        register: jest.fn(() => mockUser),
+        login: jest.fn(() => mockLoginResponse),
+      }),
+    },
+  ];
+
   return mock;
 };

@@ -10,6 +10,7 @@ import {
   mockUserRegisterRequestDto,
 } from '../mocks/user/user.mock';
 import { plainToInstance } from 'class-transformer';
+import { mockUserControllerProviders } from '../mocks/user/user-providers.mock';
 
 describe('<User Controller>', () => {
   let userController: UserController;
@@ -17,16 +18,7 @@ describe('<User Controller>', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      providers: [
-        UserController,
-        {
-          provide: UserService,
-          useFactory: () => ({
-            register: jest.fn(() => mockUser),
-            login: jest.fn(() => mockLoginResponse),
-          }),
-        },
-      ],
+      providers: await mockUserControllerProviders(),
     }).compile();
 
     userService = module.get<UserService>(UserService);

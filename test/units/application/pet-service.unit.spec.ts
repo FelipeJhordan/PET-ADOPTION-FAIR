@@ -2,6 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { PetService } from 'application/services/pet.service';
 import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
+import { mockPetServiceProviders } from '../mocks/pet/pet-providers.mock';
 import {
   petMock,
   petsMock,
@@ -14,20 +15,7 @@ describe('Pet service', () => {
   let petService: PetService;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      providers: [
-        PetService,
-        {
-          provide: PetRepository,
-          useFactory: () => ({
-            save: jest.fn(() => true),
-            findOne: jest.fn(() => true),
-            find: jest.fn(() => true),
-            update: jest.fn(() => true),
-            softDelete: jest.fn(() => true),
-            updateAndGetPetById: jest.fn(() => true),
-          }),
-        },
-      ],
+      providers: await mockPetServiceProviders(),
     }).compile();
 
     petRepository = module.get<PetRepository>(PetRepository);

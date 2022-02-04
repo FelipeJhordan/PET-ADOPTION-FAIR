@@ -7,7 +7,7 @@ import { Hash } from 'application/protocols/hash.protocol';
 import { Jwt } from 'application/protocols/jwt.protocol';
 import { UserService } from 'application/services/user.service';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
-import { mockUserServiceParams } from '../mocks/user/user-providers.mock';
+import { mockUserServiceProviders } from '../mocks/user/user-providers.mock';
 import {
   mockLoginParam,
   mockUser,
@@ -21,7 +21,7 @@ describe('<User service>', () => {
   let encrypt: Jwt;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      providers: mockUserServiceParams(),
+      providers: mockUserServiceProviders(),
     }).compile();
     userRepository = module.get<UserRepository>(UserRepository);
     userService = module.get<UserService>(UserService);

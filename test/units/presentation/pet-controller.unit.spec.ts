@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { PetService } from 'application/services/pet.service';
 import { PetController } from 'presentation/controllers/pet.controller';
-import { mockPetServiceParams } from '../mocks/pet/pet-providers.mock';
+import { mockPetControllerProviders } from '../mocks/pet/pet-providers.mock';
 import { petsMock } from '../mocks/pet/pet.mock';
 
 describe('PetsController Test', () => {
@@ -10,7 +10,7 @@ describe('PetsController Test', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      providers: await mockPetServiceParams(),
+      providers: await mockPetControllerProviders(),
     }).compile();
 
     petService = module.get<PetService>(PetService);
