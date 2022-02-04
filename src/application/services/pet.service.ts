@@ -78,9 +78,17 @@ export class PetService implements IPetUseCases {
   }: IAdoptPetParams): Promise<void> {
     // não preciso verificar o usuário pois se chegou aqui ele passou pelo authGuard
     const petReturned = await this.petRepository.findOne(id_pet);
+
     if (!petReturned)
       throw new NotFoundException('Pet não encontrado.');
     if (petReturned.situation === SITUATION[SITUATION.ADOPTED])
       throw new BadRequestException('Este pet já está adotado.');
+
+    this.petRepository.update(id_pet, {
+      user: {
+        id: id_user,
+      },
+      situation: SITUATION[SITUATION.IN_PROCESS],
+    });
   }
 }

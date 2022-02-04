@@ -11,7 +11,7 @@ const date = new Date('2022-01-28T17:00:40.390Z');
 export const petMock: Pet = {
   id: randomUUID(),
   breed: 'Beagle',
-  situation: SITUATION.ADOPTED,
+  situation: SITUATION.HOMELESS,
   state: STATE.OLD,
   name: 'Beaglo',
   observation: 'Feio, porém carismático',

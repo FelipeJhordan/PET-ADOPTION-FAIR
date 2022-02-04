@@ -49,4 +49,18 @@ export const PetEntity = new EntitySchema<Pet>({
       deleteDate: true,
     },
   },
+
+  relations: {
+    user: {
+      type: 'one-to-many',
+      target: 'User',
+      joinColumn: {
+        name: 'id_user',
+        referencedColumnName: 'id',
+      },
+      eager: true,
+      cascade: ['recover'],
+      inverseSide: 'pet',
+    },
+  },
 });

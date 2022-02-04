@@ -1,5 +1,6 @@
 import { SITUATION } from './enums/situation.enum';
 import { STATE } from './enums/state.enum';
+import { User } from './user';
 
 export class Pet {
   id: string;
@@ -10,6 +11,7 @@ export class Pet {
   situation: SITUATION;
   createdAt: Date;
   updatedAt: Date;
+  user?: User;
   deletedAt?: Date;
   constructor(
     breed: string,
@@ -21,6 +23,7 @@ export class Pet {
     deletedAt?: Date,
     createdAt?: Date,
     updatedAt?: Date,
+    user?: User,
   ) {
     this.breed = breed;
     this.state = state;
@@ -28,6 +31,7 @@ export class Pet {
     this.name = name;
     this.observation = observation;
     this.id = id;
+    this.user = user;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.deletedAt = deletedAt;

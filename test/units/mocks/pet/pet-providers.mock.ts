@@ -15,7 +15,7 @@ export const mockPetServiceProviders = (): Array<any> => {
       provide: PetRepository,
       useFactory: () => ({
         save: jest.fn(() => true),
-        findOne: jest.fn(() => true),
+        findOne: jest.fn(() => petMock),
         find: jest.fn(() => petMock),
         update: jest.fn(() => true),
         softDelete: jest.fn(() => true),
