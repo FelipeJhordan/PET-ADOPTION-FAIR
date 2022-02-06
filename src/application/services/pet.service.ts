@@ -6,6 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { SITUATION } from 'domain/models/enums/situation.enum';
 import { Pet } from 'domain/models/pet';
+import { IAcceptAdoptParams } from 'domain/protocols/pets/accept-adopt-params';
 import { IAdoptPetParams } from 'domain/protocols/pets/adopt-pet-params';
 import { IPetUseCases } from 'domain/usecases/pets/pets-usecases';
 import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
@@ -82,11 +83,18 @@ export class PetService implements IPetUseCases {
     if (!petReturned)
       throw new NotFoundException('Pet não encontrado.');
     adoptionSituationException(petReturned.situation);
-    const d = await this.petRepository.update(id_pet, {
+    await this.petRepository.update(id_pet, {
       user: {
         id: id_user,
       },
       situation: SITUATION.IN_PROCESS,
     });
+  }
+
+  async acceptAdopt({
+    id_pet,
+    id_user,
+  }: IAcceptAdoptParams): Promise<void> {
+    await this.petRepository.findOne(id_pet);
   }
 }
