@@ -1,9 +1,11 @@
 import {
+  BadRequestException,
   Injectable,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Console } from 'console';
 import { SITUATION } from 'domain/models/enums/situation.enum';
 import { Pet } from 'domain/models/pet';
 import { IAcceptAdoptParams } from 'domain/protocols/pets/accept-adopt-params';
@@ -97,8 +99,14 @@ export class PetService implements IPetUseCases {
     id_user,
   }: IAcceptAdoptParams): Promise<void> {
     const petReturned = await this.petRepository.findOne(id_pet);
-    if (!petReturned)
+    if (!petReturned) {
       throw new NotFoundException('Pet não encontrado.');
+    }
     isPetSituationInProcess(petReturned.situation);
+    if (petReturned.user.id === id_user) {
+      throw new BadRequestException(
+        'O atendente não têm permissão para aceitar o pedido de adoção para si próprio.',
+      );
+    }
   }
 }
