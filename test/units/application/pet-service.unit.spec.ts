@@ -178,4 +178,15 @@ describe('Pet service', () => {
       mockAcceptAdoptParams.id_pet,
     );
   });
+
+  it('Should throw if petRepository.findOne return null', async () => {
+    jest
+      .spyOn(petRepository, 'findOne')
+      .mockReturnValueOnce(Promise.resolve(null));
+    const promise = petService.acceptAdopt(mockAcceptAdoptParams);
+
+    expect(promise).rejects.toThrow(
+      new NotFoundException('Pet não encontrado.'),
+    );
+  });
 });
