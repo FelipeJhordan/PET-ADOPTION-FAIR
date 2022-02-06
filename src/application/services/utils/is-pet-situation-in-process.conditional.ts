@@ -1,16 +1,16 @@
 import { BadRequestException } from '@nestjs/common';
 
-export const adoptionSituationException = (situation: string) =>
+export const isPetSituationInProcess = (situation: string) =>
   conditional[`${situation}`]();
 
 const conditional = {
   ['sem-lar']: (): void => {
-    return;
+    throw new BadRequestException(
+      'Pet não está em nenhum processo de adoção',
+    );
   },
   ['em processo']: () => {
-    throw new BadRequestException(
-      'Pet já está em processo de adoçãoo',
-    );
+    return;
   },
   ['adotado']: () => {
     throw new BadRequestException('Este pet já está adotado.');
