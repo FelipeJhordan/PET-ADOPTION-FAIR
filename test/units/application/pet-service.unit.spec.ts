@@ -16,6 +16,7 @@ import {
   mockAdoptPetServiceParams,
   mockAcceptAdoptParams,
   petMock2,
+  petMock3,
 } from '../mocks/pet/pet.mock';
 
 describe('Pet service', () => {
@@ -201,18 +202,9 @@ describe('Pet service', () => {
   // });
 
   it('Should throw if this request clerk not is a same user trying be guardian for a pet', async () => {
-    const petMock = {
-      ...petMock2,
-      situation: SITUATION.IN_PROCESS,
-      user: {
-        id: mockAcceptAdoptParams.id_user,
-      },
-    };
     jest
       .spyOn(petRepository, 'findOne')
-      .mockImplementationOnce(async () =>
-        Promise.resolve(petMock as Pet),
-      );
+      .mockImplementationOnce(async () => Promise.resolve(petMock3));
 
     const promise = petService.acceptAdopt(mockAcceptAdoptParams);
 
@@ -221,5 +213,21 @@ describe('Pet service', () => {
         'O atendente não têm permissão para aceitar o pedido de adoção para si próprio.',
       ),
     );
+  });
+
+  it('Should call petService.update with correct values', async () => {
+    jest
+      .spyOn(petRepository, 'findOne')
+      .mockImplementationOnce(async () => Promise.resolve(petMock3));
+    const updateSpy = jest.spyOn(petRepository, 'update');
+
+    await petService.acceptAdopt({
+      ...mockAcceptAdoptParams,
+      id_user: 'diff_id_user',
+    });
+
+    expect(updateSpy).toBeCalledWith(mockAcceptAdoptParams.id_pet, {
+      situation: SITUATION.ADOPTED,
+    });
   });
 });

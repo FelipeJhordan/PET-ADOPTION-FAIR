@@ -33,6 +33,18 @@ export const petMock2: Pet = {
   deletedAt: null,
 };
 
+export const petMock3: Pet = (() => {
+  const petMock = {
+    ...petMock2,
+    situation: SITUATION.IN_PROCESS,
+    user: {
+      id: 'id_user',
+    },
+  };
+
+  return petMock as Pet;
+})();
+
 export const petDtoMock: PetDto = PetDto.toDto(petMock);
 export const mockAddPetRequestDTO: AddPetRequestDto = {
   ...petDtoMock,
