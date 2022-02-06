@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto';
 import { SITUATION } from 'domain/models/enums/situation.enum';
 import { STATE } from 'domain/models/enums/state.enum';
 import { Pet } from 'domain/models/pet';
+import { IAcceptAdoptParams } from 'domain/protocols/pets/accept-adopt-params';
 import AddPetRequestDto from 'shared/dtos/pet/AddPetRequestDto';
 import PetDto from 'shared/dtos/pet/PetDto';
 import UpdatePetRequestDto from 'shared/dtos/pet/UpdatePetRequestDto';
@@ -48,3 +49,8 @@ export const mockAdoptPetServiceParams = {
 };
 
 export const petsMock: Pet[] = [petMock, petMock2];
+
+export const mockAcceptAdoptParams: IAcceptAdoptParams = {
+  id_pet: 'id_pet',
+  id_user: 'id_user',
+};

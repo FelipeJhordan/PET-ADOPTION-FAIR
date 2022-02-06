@@ -13,6 +13,7 @@ import {
   mockAddPetRequestDTO,
   mockUpdatePetRequestDto,
   mockAdoptPetServiceParams,
+  mockAcceptAdoptParams,
 } from '../mocks/pet/pet.mock';
 
 describe('Pet service', () => {
@@ -148,7 +149,7 @@ describe('Pet service', () => {
       .mockImplementationOnce(async () =>
         Promise.resolve({
           ...petMock,
-          situation: SITUATION[SITUATION.ADOPTED],
+          situation: SITUATION.ADOPTED,
         }),
       );
 
@@ -158,14 +159,23 @@ describe('Pet service', () => {
     );
   });
 
-  it('Should useService.adoptPet call updatePet with correct values', async () => {
+  it('Should useService.adoptPet call update in repository with correct values', async () => {
     const updatePetSpy = jest.spyOn(petRepository, 'update');
 
     await petService.adoptPet(mockAdoptPetServiceParams);
     const { id_pet, id_user } = mockAdoptPetServiceParams;
     expect(updatePetSpy).toBeCalledWith(id_pet, {
       user: { id: id_user },
-      situation: SITUATION[SITUATION.IN_PROCESS],
+      situation: SITUATION.IN_PROCESS,
     });
+  });
+
+  it('Should call petRepository.findOne with correct values', async () => {
+    const acceptAdoptet = jest.spyOn(petRepository, 'findOne');
+    await petService.acceptAdopt(mockAcceptAdoptParams);
+
+    expect(acceptAdoptet).toBeCalledWith(
+      mockAcceptAdoptParams.id_pet,
+    );
   });
 });
