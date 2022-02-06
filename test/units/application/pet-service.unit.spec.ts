@@ -14,6 +14,7 @@ import {
   mockUpdatePetRequestDto,
   mockAdoptPetServiceParams,
   mockAcceptAdoptParams,
+  petMock2,
 } from '../mocks/pet/pet.mock';
 
 describe('Pet service', () => {
@@ -143,7 +144,7 @@ describe('Pet service', () => {
       new NotFoundException('Pet não encontrado.'),
     );
   });
-  it('Should throw if pet situation is ADOPTED  ', async () => {
+  it('Should throw if pet situation is not "homeless"', async () => {
     jest
       .spyOn(petRepository, 'findOne')
       .mockImplementationOnce(async () =>
@@ -171,10 +172,12 @@ describe('Pet service', () => {
   });
 
   it('Should call petRepository.findOne with correct values', async () => {
-    const acceptAdoptet = jest.spyOn(petRepository, 'findOne');
+    const acceptAdoptet = jest
+      .spyOn(petRepository, 'findOne')
+      .mockReturnValueOnce(Promise.resolve(petMock2));
     await petService.acceptAdopt(mockAcceptAdoptParams);
 
-    expect(acceptAdoptet).toBeCalledWith(
+    await expect(acceptAdoptet).toBeCalledWith(
       mockAcceptAdoptParams.id_pet,
     );
   });
@@ -188,5 +191,11 @@ describe('Pet service', () => {
     expect(promise).rejects.toThrow(
       new NotFoundException('Pet não encontrado.'),
     );
+  });
+
+  it('Should throw if pet situation is not "in process"', async () => {
+    const promise = petService.acceptAdopt(mockAcceptAdoptParams);
+
+    expect(promise).rejects.toThrow();
   });
 });
