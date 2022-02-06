@@ -12,7 +12,8 @@ import { IPetUseCases } from 'domain/usecases/pets/pets-usecases';
 import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
 import AddPetRequestDto from 'shared/dtos/pet/AddPetRequestDto';
 import UpdatePetRequestDto from 'shared/dtos/pet/UpdatePetRequestDto';
-import { adoptionSituationException } from './utils/adoption-situation.conditional';
+import { isPetSituationHomeless } from './utils/is-pet-situation-homeless.conditional';
+import { isPetSituationInProcess } from './utils/is-pet-situation-in-process.conditional';
 
 @Injectable()
 export class PetService implements IPetUseCases {
@@ -82,7 +83,7 @@ export class PetService implements IPetUseCases {
 
     if (!petReturned)
       throw new NotFoundException('Pet não encontrado.');
-    adoptionSituationException(petReturned.situation);
+    isPetSituationHomeless(petReturned.situation);
     await this.petRepository.update(id_pet, {
       user: {
         id: id_user,
@@ -98,5 +99,6 @@ export class PetService implements IPetUseCases {
     const petReturned = await this.petRepository.findOne(id_pet);
     if (!petReturned)
       throw new NotFoundException('Pet não encontrado.');
+    isPetSituationInProcess(petReturned.situation);
   }
 }
