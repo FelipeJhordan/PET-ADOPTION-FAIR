@@ -1,4 +1,5 @@
 import {
+  IAcceptAdopt,
   IAddPetUseCase,
   IAdoptPetUsecase,
   IListPetsUsecase,
@@ -13,4 +14,5 @@ export interface IPetUseCases
     IDeletePet,
     IUpdatePet,
     IShowById,
-    IAdoptPetUsecase {}
+    IAdoptPetUsecase,
+    IAcceptAdopt {}
