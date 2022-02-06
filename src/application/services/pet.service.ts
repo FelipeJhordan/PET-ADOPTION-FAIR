@@ -95,6 +95,8 @@ export class PetService implements IPetUseCases {
     id_pet,
     id_user,
   }: IAcceptAdoptParams): Promise<void> {
-    await this.petRepository.findOne(id_pet);
+    const petReturned = await this.petRepository.findOne(id_pet);
+    if (!petReturned)
+      throw new NotFoundException('Pet não encontrado.');
   }
 }
