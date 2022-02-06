@@ -108,5 +108,9 @@ export class PetService implements IPetUseCases {
         'O atendente não têm permissão para aceitar o pedido de adoção para si próprio.',
       );
     }
+
+    await this.petRepository.update(id_pet, {
+      situation: SITUATION.ADOPTED,
+    });
   }
 }
