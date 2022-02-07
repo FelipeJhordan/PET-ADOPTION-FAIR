@@ -16,8 +16,10 @@
 - Melhorar Arquitetura?
 
 ### Objetivos de negócio
-- Criar endpoint para o usuário comum poder tentar adotar um pet
-- Criar endpoint para o atendente/admin aceitar ou não a adotação ( atendente também é um usuário e poderá adotar, porem o atendente não poderá aceitar a adotação de um pet que ele mesmo está tentando adotar... )
+
+- Criar endpoint para o usuário comum poder tentar adotar um pet ✔
+- Criar endpoint para o atendente/admin aceitar ou não a adotação ( atendente também é um usuário e poderá adotar, porem o atendente não poderá aceitar a adotação de um pet que ele mesmo está tentando adotar... ) ✔
+
 ## Motivação
 
 Aprender conceitos novos / me aprimorar antes de começar um novo projeto na empresa.
