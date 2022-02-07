@@ -1,11 +1,10 @@
-import { Exclude, Expose, plainToClass } from 'class-transformer';
+import { Expose, plainToClass } from 'class-transformer';
 import { SITUATION } from 'domain/models/enums/situation.enum';
 import { STATE } from 'domain/models/enums/state.enum';
 import { Pet } from 'domain/models/pet';
 
 export default class PetDto {
   @Expose()
-  @Exclude()
   id: string;
   @Expose()
   name: string;
