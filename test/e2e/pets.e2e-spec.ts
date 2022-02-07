@@ -92,6 +92,7 @@ describe('  (e2e)', () => {
     expect(body).toEqual([
       {
         ...mockAddPetRequestDTO,
+        id: body.id,
         createdAt: body[0].createdAt,
         updatedAt: body[0].updatedAt,
         deletedAt: body[0].deletedAt,
