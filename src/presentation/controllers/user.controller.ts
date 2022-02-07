@@ -1,10 +1,12 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { UserService } from 'application/services/user.service';
 import { LoginRequestDto } from 'shared/dtos/user/LoginRequestDto';
 import { ILoginResponseDto } from 'shared/dtos/user/LoginResponseDto';
 import RegisterRequestDto from 'shared/dtos/user/RegisterRequestDto';
 import { UserDto } from 'shared/dtos/user/UserDto';
 
+@ApiTags('users')
 @Controller('/users') // Deveria ter um controller só para funções de login /auth ou um /login -- mas deixa queto kk
 export class UserController {
   constructor(private userService: UserService) {}

@@ -1,4 +1,5 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import {
   HealthCheck,
   HealthCheckService,
@@ -7,6 +8,7 @@ import {
 import { AuthGuard } from 'infra/rest/guard/auth-guard';
 import { Roles } from 'presentation/decorators/roles.decorator';
 
+@ApiTags('health')
 @Controller('health')
 @UseGuards(AuthGuard)
 export class HealthController {

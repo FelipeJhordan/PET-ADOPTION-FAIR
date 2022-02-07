@@ -10,6 +10,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PetService } from 'application/services/pet.service';
 import { AuthGuard } from 'infra/rest/guard/auth-guard';
 import { Roles } from 'presentation/decorators/roles.decorator';
@@ -18,6 +19,7 @@ import AddPetRequestDto from 'shared/dtos/pet/AddPetRequestDto';
 import PetDto from 'shared/dtos/pet/PetDto';
 import UpdatePetRequestDto from 'shared/dtos/pet/UpdatePetRequestDto';
 
+@ApiTags('pets')
 @UseGuards(AuthGuard)
 @Controller('/pets')
 export class PetController {
@@ -25,6 +27,8 @@ export class PetController {
 
   @Get()
   @Roles('COMMON', 'CLERK')
+  @ApiResponse({ status: 204, description: 'No Content' })
+  @ApiResponse({ status: 200, description: 'Ok' })
   public async listPets(): Promise<PetDto[]> {
     return (await this.petService.listPets()).map((pet) =>
       PetDto.toDto(pet),
