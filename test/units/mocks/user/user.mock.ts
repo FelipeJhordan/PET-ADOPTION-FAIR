@@ -37,13 +37,13 @@ export const mockUser: User = {
 
 export const mockUserClerk: User = {
   id: randomUUID(),
-  username: 'felipejhordan',
+  username: 'felipejhordanalves',
   password: '123',
   role: new Role(ROLE[ROLE.CLERK]),
   person: new Person(
     'Rua Mônica Machiyama',
     'felipe jhordan',
-    'felipejordan.alves@gmail.com',
+    'felipejhordan.alves@gmail.com',
     '3499757878',
   ),
   createdAt: date,

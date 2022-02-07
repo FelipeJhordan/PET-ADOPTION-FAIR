@@ -72,7 +72,7 @@ export class PetController {
   }
 
   @Patch(':id/adopt')
-  @Roles('USER', 'CLERK')
+  @Roles('COMMON', 'CLERK')
   public async adoptedPet(
     @Param('id') id_pet: string,
     @UserDecorator() id_user: string,
@@ -81,7 +81,7 @@ export class PetController {
   }
 
   @Patch(':id/accept')
-  @Roles('USER', 'CLERK')
+  @Roles('CLERK')
   public async acceptAdopt(
     @Param('id') id_pet: string,
     @UserDecorator() id_user: string,

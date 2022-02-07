@@ -9,7 +9,10 @@ import { PetRepository } from 'infra/database/pets/repositories/pet.repository';
 import { mockAddPetRequestDTO } from '../units/mocks/pet/pet.mock';
 import { Repository } from 'typeorm';
 import { Pet } from 'domain/models/pet';
-import { mockUserClerk } from '../units/mocks/user/user.mock';
+import {
+  mockUser,
+  mockUserClerk,
+} from '../units/mocks/user/user.mock';
 import { Jwt } from 'application/protocols/jwt.protocol';
 import { JwtAdapter } from 'infra/jwt/jwt-adapter';
 import { UserRepository } from 'infra/database/users/repositories/user.repository';
@@ -30,6 +33,7 @@ describe('  (e2e)', () => {
   let userRepository: UserRepository;
   let encrypt: Jwt;
   let token: string;
+  let token2: string;
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       imports: [
@@ -60,6 +64,8 @@ describe('  (e2e)', () => {
 
     const userSaved = await userRepository.save(mockUserClerk);
     token = await encrypt.sign({ id: userSaved.id });
+    const userSaved2 = await userRepository.save(mockUser);
+    token2 = await encrypt.sign({ id: userSaved2.id });
   });
 
   it('/pets (POST)', async () => {
@@ -111,11 +117,11 @@ describe('  (e2e)', () => {
       deletedAt: body.deletedAt,
     });
   });
-  it('/pets/:id (PATCH)', async () => {
+  it('/pets/:id/adopt (PATCH)', async () => {
     const uuidPet = await findFirstPetAndReturnId(petRepository);
     await request(app.getHttpServer())
       .patch('/pets/' + uuidPet + '/adopt')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${token2}`)
       .expect(HttpStatus.OK);
 
     const data = (await findFirstPetAndReturnId(
@@ -125,6 +131,24 @@ describe('  (e2e)', () => {
 
     expect(data.situation).toEqual(SITUATION.IN_PROCESS);
   });
+
+  it('/pets/:id/accept (PATCH)', async () => {
+    const uuidPet: Pet = (await findFirstPetAndReturnId(
+      petRepository,
+      true,
+    )) as Pet;
+    const { error } = await request(app.getHttpServer())
+      .patch('/pets/' + uuidPet.id + '/accept')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(HttpStatus.OK);
+
+    const data = (await findFirstPetAndReturnId(
+      petRepository,
+      true,
+    )) as Pet;
+    expect(data.situation).toEqual(SITUATION.ADOPTED);
+  });
+
   it('/pets/:id (DELETE)', async () => {
     const uuidPet = await findFirstPetAndReturnId(petRepository);
     await request(app.getHttpServer())
@@ -140,6 +164,7 @@ describe('  (e2e)', () => {
   afterAll(async () => {
     await petRepository.query('DELETE FROM pets;');
     await petRepository.query('DELETE FROM users;');
+    await petRepository.query('DELETE FROM persons;');
     await app.close();
   });
 });
