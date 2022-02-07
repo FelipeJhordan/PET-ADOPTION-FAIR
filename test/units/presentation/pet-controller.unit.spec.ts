@@ -29,6 +29,16 @@ describe('PetsController Test', () => {
     expect(pets[0].name).toEqual(petsMock[0].name);
   });
 
+  it('should  update a pet when PATCH /pets/:id/pet/accept', async () => {
+    jest
+      .spyOn(petService, 'acceptAdopt')
+      .mockReturnValueOnce(Promise.resolve());
+
+    const promise = petController.acceptAdopt('pet_id', 'user_id');
+
+    expect(promise).resolves.toBeUndefined();
+  });
+
   // TODO
   // Should have here all methods in presentation layer pets
   // like as add, remove, update, show, but I am with a lot sloth

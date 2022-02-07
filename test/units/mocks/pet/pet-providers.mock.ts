@@ -35,6 +35,7 @@ export const mockPetControllerProviders = (): Array<any> => {
       provide: PetService,
       useFactory: () => ({
         listPets: jest.fn(() => true),
+        acceptAdopt: jest.fn(() => true),
       }),
     },
     {
