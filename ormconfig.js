@@ -9,13 +9,15 @@ const environment = process.env.NODE_ENV;
 module.exports = {
   type: connection,
   host: host,
-  port: port,
+  port: parseInt(port),
   username: username,
   password: password,
   database: database,
 
   entities: ['dist/src/infra/database/**/*.entity.{js,ts}'],
-
+  extra: {
+    trustServerCertificate: true,
+  },
   synchronize: false,
 
   logging: true,
