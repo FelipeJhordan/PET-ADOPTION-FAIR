@@ -42,7 +42,6 @@ export class AuthGuard implements CanActivate {
         'roles',
         context.getHandler(),
       );
-
       if (!verifyRoleMatch(roleName, requiredRoles)) {
         throw callError['noAuthorized'];
       }
