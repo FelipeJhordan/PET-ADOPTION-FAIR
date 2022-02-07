@@ -14,7 +14,7 @@ export class createRelationshipPetsUsers1643991346771
         'pets',
         new TableColumn({
           name: 'id_user',
-          type: 'uuid',
+          type: 'UNIQUEIDENTIFIER',
           isNullable: true,
         }),
       )

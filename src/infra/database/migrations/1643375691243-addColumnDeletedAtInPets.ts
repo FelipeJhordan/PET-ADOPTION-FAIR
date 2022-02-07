@@ -12,7 +12,7 @@ export class addColumnDeletedAtInPets1643375691243
       'pets',
       new TableColumn({
         name: 'deletedAt',
-        type: 'timestamp',
+        type: 'datetime',
         isNullable: true,
       }),
     );

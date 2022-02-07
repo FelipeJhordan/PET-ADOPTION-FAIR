@@ -8,9 +8,9 @@ export class createRoles1643636654482 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'SERIAL',
+            type: 'int',
             isPrimary: true,
-            generationStrategy: 'rowid',
+            generationStrategy: 'identity',
           },
           {
             name: 'name',
@@ -22,7 +22,7 @@ export class createRoles1643636654482 implements MigrationInterface {
     );
 
     const PAPERS = ['ADMIN', 'CLERK', 'COMMON'];
-
+    let i = 0;
     const promises = PAPERS.map((role) => {
       queryRunner.manager
         .createQueryBuilder()
@@ -30,6 +30,7 @@ export class createRoles1643636654482 implements MigrationInterface {
         .into('roles')
         .values({
           name: role,
+          id: ++i,
         })
         .execute();
     });

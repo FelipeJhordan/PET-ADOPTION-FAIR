@@ -14,7 +14,7 @@ export class createRelationshipUsersPersons1643646812783
         'users',
         new TableColumn({
           name: 'id_person',
-          type: 'uuid',
+          type: 'UNIQUEIDENTIFIER',
         }),
       )
       .then(() => {

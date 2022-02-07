@@ -16,15 +16,15 @@ export class insertAdmin1643985355762 implements MigrationInterface {
       .returning(['id'])
       .execute()
       .then(async (returnedValue) => {
+        console.log(returnedValue);
         await queryRunner.manager.query(
-          'INSERT INTO "users"("id", "username", "password", "createdAt", "updatedAt", "deletedAt", "role", "id_person") VALUES (DEFAULT, $1, $2, DEFAULT, DEFAULT, DEFAULT, $3, $4) RETURNING "id", "createdAt", "updatedAt", "deletedAt"',
+          `INSERT INTO "users"("id", "username", "password", "createdAt", "updatedAt", "deletedAt", "role", "id_person") VALUES (DEFAULT, $1, $2, DEFAULT, DEFAULT, DEFAULT, $3, '${returnedValue.raw[0].id}');`,
           [
             'ADMIN',
             await new BcryptAdapter().hash(
               process.env.ADMIN_PASSWORD,
             ),
             1,
-            returnedValue.raw[0].id,
           ],
         );
       });

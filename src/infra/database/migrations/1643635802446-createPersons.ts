@@ -10,10 +10,10 @@ export class createPersons1643635802446
         columns: [
           {
             name: 'id',
-            type: 'uuid',
+            type: 'UNIQUEIDENTIFIER',
             isPrimary: true,
-            generationStrategy: 'uuid',
-            default: 'uuid_generate_v4()',
+            generationStrategy: 'identity',
+            default: 'NEWID()',
           },
           {
             name: 'nome',
@@ -34,17 +34,17 @@ export class createPersons1643635802446
           },
           {
             name: 'createdAt',
-            type: 'timestamp',
-            default: 'now()',
+            type: 'datetime',
+            default: 'CURRENT_TIMESTAMP',
           },
           {
             name: 'updatedAt',
-            type: 'timestamp',
-            default: 'now()',
+            type: 'datetime',
+            default: 'CURRENT_TIMESTAMP',
           },
           {
             name: 'deletedAt',
-            type: 'timestamp',
+            type: 'datetime',
             isNullable: true,
           },
         ],
