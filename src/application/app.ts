@@ -19,7 +19,9 @@ export async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document, {
+    customSiteTitle: 'Feira de adoção.',
+  });
 
   await app.listen(3000);
 

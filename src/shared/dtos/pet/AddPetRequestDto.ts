@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEnum,
   IsNotEmpty,
@@ -12,21 +13,37 @@ import { IAddPetParams } from 'domain/protocols/pets/add-pet-params';
 export default class AddPetRequestDto implements IAddPetParams {
   @IsString()
   @IsOptional()
+  @ApiProperty({
+    example: 'Rex',
+  })
   name: string;
   @IsString()
   @IsNotEmpty()
+  @ApiProperty({
+    examples: ['Shitzu', 'Yorkshire'],
+  })
   breed: string;
 
   @IsEnum(STATE)
   @IsNotEmpty()
+  @ApiProperty({
+    enum: STATE,
+  })
   state: STATE;
 
   @IsString()
   @IsOptional()
+  @ApiProperty({
+    example:
+      'Têm alta sensibilidade a barulhos estrondosos ( foguetes e raios )',
+  })
   observation?: string;
 
   @IsEnum(SITUATION)
   @IsNotEmpty()
+  @ApiProperty({
+    enum: SITUATION,
+  })
   situation: SITUATION;
 
   static fromDto(petDto: AddPetRequestDto): Pet {
