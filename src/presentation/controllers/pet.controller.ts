@@ -11,7 +11,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { PetService } from 'application/services/pet.service';
-import { User } from 'domain/models/user';
 import { AuthGuard } from 'infra/rest/guard/auth-guard';
 import { Roles } from 'presentation/decorators/roles.decorator';
 import { UserDecorator } from 'presentation/decorators/user.decorator';
@@ -79,5 +78,14 @@ export class PetController {
     @UserDecorator() id_user: string,
   ) {
     await this.petService.adoptPet({ id_pet, id_user });
+  }
+
+  @Patch(':id/accept')
+  @Roles('USER', 'CLERK')
+  public async acceptAdopt(
+    @Param('id') id_pet: string,
+    @UserDecorator() id_user: string,
+  ) {
+    await this.petService.acceptAdopt({ id_pet, id_user });
   }
 }
