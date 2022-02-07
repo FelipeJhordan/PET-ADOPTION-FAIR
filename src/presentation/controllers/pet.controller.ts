@@ -10,7 +10,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PetService } from 'application/services/pet.service';
 import { AuthGuard } from 'infra/rest/guard/auth-guard';
 import { Roles } from 'presentation/decorators/roles.decorator';
@@ -20,6 +20,7 @@ import PetDto from 'shared/dtos/pet/PetDto';
 import UpdatePetRequestDto from 'shared/dtos/pet/UpdatePetRequestDto';
 
 @ApiTags('pets')
+@ApiBearerAuth()
 @UseGuards(AuthGuard)
 @Controller('/pets')
 export class PetController {
