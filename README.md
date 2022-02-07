@@ -12,6 +12,7 @@
 - Aplicar testes unitários ✔
 - Aplicar testes de integração ✔
 - Aplicar TDD ✔
+- Aplicar paginação ( deveria por desde do começo, não? )
 - Por no ar ( Por que não ? )
 - Melhorar Arquitetura?
 
